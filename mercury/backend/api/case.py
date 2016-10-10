@@ -13,6 +13,26 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-DEBUG = True
+from flask import Blueprint
+from mercury.backend.api import ApiResource
+from mercury.backend.models import Case
 
-SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/cm?charset=utf8'
+bp = Blueprint('restapi_case', __name__)
+api = Api(bp)
+
+
+@api.resource('/cases')
+class CaseListResource(ApiResource):
+
+    def get(self):
+        return Case.query.all()
+
+    def post(self):
+
+
+
+@api.resource('/cases/<int:case_id>')
+class CaseResource(ApiResource):
+
+    def get(self, case_id):
+        return Case.query.filter(Case.id == case_id).first()
