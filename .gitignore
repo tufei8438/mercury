@@ -1,0 +1,9 @@
+.DS_Store
+
+*.pyc
+*.pyx
+*.log
+
+.idea/
+venv/
+mercury/frontend/static/js/lib/bower_components/

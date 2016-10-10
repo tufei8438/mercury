@@ -1,0 +1,42 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>员工管理</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">首页</a>
+            </li>
+            <li>
+                <a>组织架构</a>
+            </li>
+            <li class="active">
+                <strong>员工管理</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="employeeCtrl">
+    <div class="row">
+        <div class="col-lg-4" ng-repeat="employee in employees">
+            <div class="contact-box">
+                <a ui-sref="struct.employee_detail">
+                    <div class="col-sm-4">
+                        <div class="text-center">
+                            <img alt="image" class="img-circle m-t-xs img-responsive" src="img/a2.jpg">
+                            <div class="m-t-xs font-bold">{{ employee.job_title }}</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <h3><strong>{{ employee.name }}</strong></h3>
+                        <p><i class="fa fa-map-marker"></i> Riviera State 32/106</p>
+                        <address>
+                            <strong>小付钱包技术（北京）有限公司</strong><br>
+                            邮箱：<br>{{ employee.work_email }}<br>
+                            手机：<br>{{ employee.work_phone }}
+                        </address>
+                    </div>
+                    <div class="clearfix"></div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

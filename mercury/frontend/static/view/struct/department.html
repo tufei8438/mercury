@@ -1,0 +1,103 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>部门视图</h2>
+        <ol class="breadcrumb">
+            <li>
+                <a href="index.html">首页</a>
+            </li>
+            <li>
+                <a>部门管理</a>
+            </li>
+            <li class="active">
+                <strong>部门视图</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="departmentTreeCtrl">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <strong>jsTree / ngJsTree</strong> is jquery plugin, that provides interactive trees. It is absolutely free, open source and distributed under the MIT license. jsTree is easily extendable, themable and configurable, it supports HTML & JSON data sources and AJAX loading.
+                    Get more info on: <a href="http://www.jstree.com/" target="_blank">http://www.jstree.com/</a> and check documentation angular directive <a href="https://github.com/ezraroi/ngJsTree" target="_blank">https://github.com/ezraroi/ngJsTree</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Basic example <small>with custom Font Awesome icons.</small></h5>
+                </div>
+                <div class="ibox-content">
+                    <div js-tree="treeConfig" ng-model="treeData" tree="treeInstance"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <h3>添加部门</h3>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">上级部门</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control">
+                                        <option>部门1</option>
+                                        <option>部门2</option>
+                                        <option>部门3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">部门名称</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="部门名称" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-offset-2 col-lg-10">
+                                    <button class="btn btn-default btn-white" type="submit">添 加</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form class="form-horizontal">
+                            <h3>修改部门</h3>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">选择部门</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control">
+                                        <option>部门1</option>
+                                        <option>部门2</option>
+                                        <option>部门3</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-lg-2 control-label">部门名称</label>
+                                <div class="col-lg-10">
+                                    <input type="text" placeholder="新部门名称" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-offset-2 col-lg-10">
+                                    <button class="btn btn-default btn-white" type="submit">修 改</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
