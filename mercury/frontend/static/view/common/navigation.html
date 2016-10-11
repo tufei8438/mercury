@@ -1,38 +1,45 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
-        <ul side-navigation class="nav metismenu" id="side-menu">
-            <li class="nav-header">
+  <div class="sidebar-collapse">
+    <ul side-navigation class="nav metismenu" id="side-menu">
+      <li class="nav-header">
 
-                <div class="dropdown profile-element" dropdown>
-                    <img alt="image" class="img-circle" src="img/profile_small.jpg"/>
-                    <a class="dropdown-toggle" dropdown-toggle href>
+        <div class="dropdown profile-element" dropdown>
+          <img alt="image" class="img-circle" src="img/profile_small.jpg"/>
+          <a class="dropdown-toggle" dropdown-toggle href>
                             <span class="clear">
                                 <span class="block m-t-xs">
                                     <strong class="font-bold">David Williams</strong>
                              </span>
                                 <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
                             </span>
-                    </a>
-                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a ui-sref="profile">Profile</a></li>
-                        <li><a ui-sref="contacts">Contacts</a></li>
-                        <li><a ui-sref="inbox">Mailbox</a></li>
-                        <li class="divider"></li>
-                        <li><a href="../login.html">Logout</a></li>
-                    </ul>
-                </div>
-                <div class="logo-element">
-                    IN+
-                </div>
-            </li>
-            <li ng-class="{active: $state.includes('material')}">
-                <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">原料管理</span><span class="fa arrow"></span></a>
-                <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('material')}">
-                    <li ui-sref-active="active"><a ui-sref="material.category">分类管理</a></li>
-                    <li ui-sref-active="active"><a ui-sref="material.material">原料管理</a></li>
-                </ul>
-            </li>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight m-t-xs">
+            <li><a ui-sref="profile">Profile</a></li>
+            <li><a ui-sref="contacts">Contacts</a></li>
+            <li><a ui-sref="inbox">Mailbox</a></li>
+            <li class="divider"></li>
+            <li><a href="../login.html">Logout</a></li>
+          </ul>
+        </div>
+        <div class="logo-element">
+          IN+
+        </div>
+      </li>
+      <li ng-class="{active: $state.includes('material')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">原料管理</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('material')}">
+          <li ui-sref-active="active"><a ui-sref="material.category">分类管理</a></li>
+          <li ui-sref-active="active"><a ui-sref="material.material">原料管理</a></li>
         </ul>
-
-    </div>
+      </li>
+      <li ng-class="{active: $state.includes('case')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">案件管理</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('case')}">
+          <li ui-sref-active="active"><a ui-sref="case.register">案件登记</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
 </nav>

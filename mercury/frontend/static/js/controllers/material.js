@@ -6,9 +6,9 @@ materialCtrlApp.controller('materialCategoryCtrl', ['$scope', '$log', 'Restangul
 
     var categoryService = Restangular.all("/api/materials/categories");
 
-    $scope.pageTitle = "原料分类"
-    $scope.topNavMenu = "原料管理"
-    $scope.subNavMenu = "原料分类"
+    $scope.pageTitle = "原料分类";
+    $scope.topNavMenu = "原料管理";
+    $scope.subNavMenu = "原料分类";
 
     $scope.categoryAdd = {
         merchant_code: "1001",

@@ -1,16 +1,17 @@
 'use strict';
 
-var plutoApp = angular.module('plutoApp', [
+var dcmsApp = angular.module('dcmsApp', [
     'ui.router',                    // Routing
     'oc.lazyLoad',                  // ocLazyLoad
     'ui.bootstrap',                 // Ui Bootstrap
     'ngSanitize',                   // ngSanitize
     'restangular',                  // restangular
     'mainCtrlApp',
+    'caseCtrlApp',
     'materialCtrlApp'
 ]);
 
-plutoApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
+dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
     $urlRouterProvider.otherwise("/material/category");
 
     $ocLazyLoadProvider.config({
@@ -47,11 +48,18 @@ plutoApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider
         .state('material.material', {
             url: "/material",
             templateUrl: "view/material/materials.html"
+        }).state('case', {
+            abstract: true,
+            url: "/case",
+            templateUrl: contentTemplatUrl
+        }).state('case.register', {
+            url: "/register",
+            templateUrl: "view/case/register.html"
         });
 
 });
 
-plutoApp.run(function($rootScope, $state) {
+dcmsApp.run(function($rootScope, $state) {
     $rootScope.$state = $state;
     $rootScope.alerts = [];
 

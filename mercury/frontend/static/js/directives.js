@@ -107,7 +107,7 @@ function iboxTools($timeout) {
     return {
         restrict: 'A',
         scope: true,
-        templateUrl: 'views/common/ibox_tools.html',
+        templateUrl: 'view/common/ibox_tools.html',
         controller: function ($scope, $element) {
             // Function for collapse ibox
             $scope.showhide = function () {
@@ -139,7 +139,7 @@ function iboxToolsFullScreen($timeout) {
     return {
         restrict: 'A',
         scope: true,
-        templateUrl: 'views/common/ibox_tools_full_screen.html',
+        templateUrl: 'view/common/ibox_tools_full_screen.html',
         controller: function ($scope, $element) {
             // Function for collapse ibox
             $scope.showhide = function () {
@@ -296,7 +296,7 @@ function icheck($timeout) {
 
                 $scope.$watch($attrs['ngModel'], function(newValue){
                     $(element).iCheck('update');
-                })
+                });
 
                 return $(element).iCheck({
                     checkboxClass: 'icheckbox_square-green',
@@ -548,7 +548,7 @@ function markdownEditor() {
  * Pass all functions into module
  */
 angular
-    .module('plutoApp')
+    .module('dcmsApp')
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('iboxTools', iboxTools)
