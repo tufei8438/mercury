@@ -14,9 +14,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 from flask import request
-from flask.ext.restful import Resource, reqparse, abort
+from flask_restful import Resource, reqparse, abort
 from werkzeug.exceptions import HTTPException
 from mercury.log import api_log
+from mercury.backend import db
 
 
 class ApiResource(Resource):
@@ -25,9 +26,14 @@ class ApiResource(Resource):
 
     def __init__(self):
         self.arg_namespace = None
+        self.session = db.session
 
-    def get_argument(self, name):
-        return self.arg_namespace.get(name) if self.arg_namespace else None
+    def get_argument(self, name, default=None):
+        value = self.arg_namespace.get(name) if self.arg_namespace else None
+        if value is None:
+            return default
+        else:
+            return value
 
     def parse_body_to_model(self, model_class):
         req_body = request.get_json(force=True)

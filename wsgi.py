@@ -16,10 +16,10 @@
 from werkzeug.serving import run_simple
 from werkzeug.wsgi import DispatcherMiddleware
 
-from mercury import frontend
+from mercury import frontend, backend
 
 application = DispatcherMiddleware(frontend.create_app(), {
-    '/api': api.create_app()
+    '/api': backend.create_app()
 })
 
 

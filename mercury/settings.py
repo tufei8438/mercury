@@ -13,6 +13,15 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+import mercury.codec
+
+
 DEBUG = True
 
 SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/cm?charset=utf8'
+
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+RESTFUL_JSON = {
+    'cls': mercury.codec.JsonEncoder
+}

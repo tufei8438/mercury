@@ -15,5 +15,9 @@
 # under the License.
 from flask import Blueprint
 
-
 bp = Blueprint('mercuryFrontend', __name__, static_url_path='', static_folder='static')
+
+
+@bp.route('/')
+def index():
+    return bp.send_static_file('index.html')

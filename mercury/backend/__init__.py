@@ -13,6 +13,14 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+
+from mercury import factory
 
 db = SQLAlchemy()
+
+
+def create_app(settings_override=None):
+    app = factory.create_app(__name__, __path__, settings_override)
+    db.init_app(app)
+    return app
