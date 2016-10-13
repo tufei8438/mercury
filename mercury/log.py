@@ -32,7 +32,12 @@ LOGGING_CONFIG = {
         },
     },
     'loggers': {
-        'opensearch': {
+        'mercury': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': True
+        },
+        'mercury.api': {
             'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': True

@@ -18,6 +18,7 @@ from flask_restful import Api
 from flask_restful.reqparse import Argument
 
 from mercury.backend.api import ApiResource
+from mercury.backend.service.case import CaseService, CategoryService
 from mercury.backend.models import Case, Category
 from mercury.backend.generator import CodeGenerator
 
@@ -33,9 +34,7 @@ class CaseListResource(ApiResource):
 
     def post(self):
         case = self.parse_body_to_model(Case)
-        self.session.add(case)
-        self.session.commit()
-        return case
+        return CaseService().register_case(case)
 
 
 @api.resource('/cases/codes')
@@ -79,8 +78,4 @@ class CategoryListResource(ApiResource):
         category_type = self.get_argument('category_type')
         parent_code = self.get_argument('parent_code')
 
-        q = Category.query
-        if category_type is not None:
-            q = q.filter(Category.type == category_type)
-        q = q.filter(Category.parent_code == parent_code)
-        return q.all()
+        return CategoryService().get_categories(parent_code, category_type)

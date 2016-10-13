@@ -8,3 +8,11 @@
 mercury/frontend/static/.idea/
 venv/
 mercury/frontend/static/js/lib/bower_components/
+
+
+workflow/.idea/
+workflow/target/
+!workflow/.mvn/wrapper/maven-wrapper.jar
+*.iws
+*.iml
+*.ipr

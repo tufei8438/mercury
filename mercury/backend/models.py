@@ -14,6 +14,7 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 from sqlalchemy.orm.instrumentation import ClassManager
+from sqlalchemy.sql import func
 from mercury.backend import db
 
 
@@ -104,7 +105,7 @@ class Case(BaseModel):
     reporter_phone = db.Column(db.String(16))
     reporter_address = db.Column(db.String(256))
     proc_inst_id = db.Column(db.String(64))
-    begin_time = db.Column(db.DateTime)
+    begin_time = db.Column(db.DateTime, default=func.now())
     end_time = db.Column(db.DateTime)
     expect_end_time = db.Column(db.DateTime)
     status = db.Column(db.Integer)

@@ -14,13 +14,16 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 from flask_sqlalchemy import SQLAlchemy
+from flask_cache import Cache
 
 from mercury import factory
 
 db = SQLAlchemy()
+cache = Cache()
 
 
 def create_app(settings_override=None):
     app = factory.create_app(__name__, __path__, settings_override)
     db.init_app(app)
+    cache.init_app(app)
     return app
