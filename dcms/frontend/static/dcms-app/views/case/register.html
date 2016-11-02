@@ -1,0 +1,130 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="caseRegisterCtrl" ng-init="addSubmitCaseTab()">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>案件登记</h5>
+          <button class="btn btn-primary pull-right" ng-click="addSubmitCaseTab()">增加案件登记</button>
+        </div>
+        <div class="ibox-content">
+          <div class="row">
+            <div class="tabs-container">
+              <uib-tabset active="tabActive">
+                <uib-tab index="$index" ng-repeat="tab in submitCaseTabs" heading="{{tab.title}}" select="submitCaseTabChanged($index)">
+                  <div class="tab-content">
+                    <form class="form-horizontal">
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">案件编号</label>
+                      <div class="col-lg-9">
+                        <input class="form-control" ng-model="submitCase.code" readonly>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">案件来源</label>
+                      <div class="col-lg-9">
+                        <select ng-options="source.id as source.name for source in caseSourceList" class="form-control" ng-model="submitCase.source">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">案件类型</label>
+                      <div class="col-lg-9">
+                        <select ng-options="categoryType.id as categoryType.name for categoryType in caseCategoryTypeList"
+                                class="form-control" ng-model="submitCase.category_type"
+                                ng-change="categoryTypeChanged()">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">所属大类</label>
+                      <div class="col-lg-9">
+                        <select ng-options="parentCategory.longcode as parentCategory.name for parentCategory in caseParentCategoryList"
+                                class="form-control" ng-model="submitCase.parent_category_code"
+                                ng-change="caseParentCategoryChanged()">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">所属小类</label>
+                      <div class="col-lg-9">
+                        <select ng-options="category.longcode as category.name for category in caseCategoryList" class="form-control" ng-model="submitCase.category_code">
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">所属网格</label>
+                      <div class="col-lg-6">
+                        <input class="form-control" ng-model="submitCase.grid_code" readonly>
+                      </div>
+                      <div class="col-lg-3">
+                        <a class="btn btn-primary" ui-sref="case.map">选择网格</a>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">位置描述</label>
+                      <div class="col-lg-9">
+                        <textarea class="form-control" ng-model="submitCase.address"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">案件描述</label>
+                      <div class="col-lg-9">
+                        <textarea class="form-control" ng-model="submitCase.description"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">举报人姓名</label>
+                      <div class="col-lg-9">
+                        <input class="form-control" ng-model="submitCase.reporter_name"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">举报人联系电话</label>
+                      <div class="col-lg-9">
+                        <input class="form-control" ng-model="submitCase.reporter_phone"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">举报人联系地址</label>
+                      <div class="col-lg-9">
+                        <input class="form-control" ng-model="submitCase.reporter_address"/>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="col-lg-3 control-label">案件备注</label>
+                      <div class="col-lg-9">
+                        <textarea class="form-control" ng-model="submitCase.remark"/>
+                      </div>
+                    </div>
+                    <button class="btn btn-primary col-lg-offset-3 col-lg-6" type="submit" ng-click="submit()"><strong>提交登记</strong></button>
+                  </form>
+                  </div>
+                </uib-tab>
+              </uib-tabset>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>网格案件</h5>
+        </div>
+        <div class="ibox-content">
+          <table class="table table-bordered">
+            <thread>
+              <tr>
+                <th>案件编号</th>
+                <th>案件状态</th>
+                <th>案件描述</th>
+              </tr>
+            </thread>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

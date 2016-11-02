@@ -1,0 +1,90 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+  <div class="sidebar-collapse">
+    <ul side-navigation class="nav metismenu" id="side-menu">
+      <li class="nav-header">
+
+        <div class="dropdown profile-element" dropdown>
+          <img alt="image" class="img-circle" src="css/patterns/header-profile.png"/>
+          <a class="dropdown-toggle" dropdown-toggle href>
+                            <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">David Williams</strong>
+                             </span>
+                                <span class="text-muted text-xs block">Art Director <b class="caret"></b></span>
+                            </span>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight m-t-xs">
+            <li><a ui-sref="profile">Profile</a></li>
+            <li><a ui-sref="contacts">Contacts</a></li>
+            <li><a ui-sref="inbox">Mailbox</a></li>
+            <li class="divider"></li>
+            <li><a href="../login.html">Logout</a></li>
+          </ul>
+        </div>
+        <div class="logo-element">
+          IN+
+        </div>
+      </li>
+      <li ng-class="{active: $state.includes('acceptance')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">业务受理</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('acceptance')}">
+          <li ui-sref-active="active"><a ui-sref="acceptance.caseAcceptance">案件受理</a></li>
+        </ul>
+      </li>
+      <li ng-class="{active: $state.includes('collaboration')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">协同工作</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('collaboration')}">
+          <li ui-sref-active="active"><a ui-sref="collaboration.taskDispatch">任务派遣</a></li>
+          <li ui-sref-active="active"><a ui-sref="collaboration.caseSupervise">案件督办</a></li>
+          <li ui-sref-active="active"><a ui-sref="collaboration.timing">计时管理</a></li>
+        </ul>
+      </li>
+      <li ng-class="{active: $state.includes('command')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">监督指挥</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('command')}">
+          <li ui-sref-active="active"><a ui-sref="command.map">地图显示</a></li>
+          <li ui-sref-active="active"><a ui-sref="command.tracking">问题追踪</a></li>
+          <li ui-sref-active="active"><a ui-sref="command.video">视频监控</a></li>
+        </ul>
+      </li>
+      <li ng-class="{active: $state.includes('evaluation')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">综合评价</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('evaluation')}">
+          <li ui-sref-active="active"><a ui-sref="evaluation.rule">评价规则</a></li>
+          <li ui-sref-active="active"><a ui-sref="evaluation.region">区域评价</a></li>
+          <li ui-sref-active="active"><a ui-sref="evaluation.department">部门评价</a></li>
+          <li ui-sref-active="active"><a ui-sref="evaluation.staff">员工评价</a></li>
+        </ul>
+      </li>
+      <li ng-class="{active: $state.includes('maintenance')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">应用维护</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('maintenance')}">
+          <li ui-sref-active="active"><a ui-sref="maintenance.workflow">工作流</a></li>
+          <li ui-sref-active="active"><a ui-sref="maintenance.orgStructure">组织结构</a></li>
+          <li ui-sref-active="active"><a ui-sref="maintenance.permission">人员权限</a></li>
+        </ul>
+      </li>
+      <li ng-class="{active: $state.includes('basedata')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">基础数据</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('basedata')}">
+          <li ui-sref-active="active"><a ui-sref="basedata.component">部件管理</a></li>
+          <li ui-sref-active="active"><a ui-sref="basedata.category">分类管理</a></li>
+          <li ui-sref-active="active"><a ui-sref="basedata.configuration">系统配置</a></li>
+        </ul>
+      </li>
+      <li ng-class="{active: $state.includes('case')}">
+        <a href=""><i class="fa fa-bar-chart-o"></i> <span class="nav-label">案件管理</span><span
+            class="fa arrow"></span></a>
+        <ul class="nav nav-second-level collapse" ng-class="{in: $state.includes('case')}">
+          <li ui-sref-active="active"><a ui-sref="case.register">案件登记</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</nav>
