@@ -5,9 +5,9 @@
 *.log
 
 .idea/
-mercury/frontend/static/.idea/
+dcms/frontend/static/dcms-app/.idea/
 venv/
-mercury/frontend/static/js/lib/bower_components/
+dcms/frontend/static/dcms-app/js/lib/bower_components/
 
 
 workflow/.idea/

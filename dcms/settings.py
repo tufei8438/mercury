@@ -13,15 +13,25 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-from werkzeug.serving import run_simple
-from werkzeug.wsgi import DispatcherMiddleware
-
-from dcms import frontend, backend
-
-application = DispatcherMiddleware(frontend.create_app(), {
-    '/api': backend.create_app()
-})
+import dcms.codec
 
 
-if __name__ == "__main__":
-    run_simple('0.0.0.0', 5000, application, use_reloader=True, use_debugger=True)
+DEBUG = True
+
+SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/cm?charset=utf8'
+
+SQLALCHEMY_TRACK_MODIFICATIONS = True
+
+RESTFUL_JSON = {
+    'cls': dcms.codec.JsonEncoder
+}
+
+CACHE_TYPE = 'simple'
+
+CACHE_DEFAULT_TIMEOUT = 300
+
+CACHE_KEY_PREFIX = 'CACHE_MERCURY'
+
+CACHE_REDIS_HOST = '127.0.0.1'
+
+CACHE_REDIS_PORT = 6379

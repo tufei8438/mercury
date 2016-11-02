@@ -13,15 +13,17 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
-from werkzeug.serving import run_simple
-from werkzeug.wsgi import DispatcherMiddleware
+from flask_sqlalchemy import SQLAlchemy
+from flask_cache import Cache
 
-from dcms import frontend, backend
+from dcms import factory
 
-application = DispatcherMiddleware(frontend.create_app(), {
-    '/api': backend.create_app()
-})
+db = SQLAlchemy()
+cache = Cache()
 
 
-if __name__ == "__main__":
-    run_simple('0.0.0.0', 5000, application, use_reloader=True, use_debugger=True)
+def create_app(settings_override=None):
+    app = factory.create_app(__name__, __path__, settings_override)
+    db.init_app(app)
+    cache.init_app(app)
+    return app
