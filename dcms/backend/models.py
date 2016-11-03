@@ -175,6 +175,7 @@ class Department(BaseModel):
     __tablename__ = 'department'
 
     id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, nullable=False, server_default=db.text("'0'"))
     code = db.Column(db.String(32), nullable=False, unique=True, server_default=db.text("''"))
     type = db.Column(db.Integer)
     name = db.Column(db.String(64))

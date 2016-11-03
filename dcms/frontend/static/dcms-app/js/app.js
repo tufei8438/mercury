@@ -144,7 +144,21 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             templateUrl: contentTemplatUrl
         }).state('maintenance.orgStructure', {
             url: '/orgStructure',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'views/maintenance/departments.html',
+            resolve: {
+                 loadPlugin: function ($ocLazyLoad) {
+                     return $ocLazyLoad.load([
+                         {
+                             files: ['js/lib/bower_components/jstree/dist/themes/default/style.css',
+                                 'js/lib/bower_components/jstree/dist/jstree.js']
+                         },
+                         {
+                             name: 'ngJsTree',
+                             files: ['js/lib/bower_components/ng-js-tree/dist/ngJsTree.js']
+                         }
+                     ]);
+                 }
+             }
         }).state('maintenance.permission', {
             url: '/permission',
             templateUrl: 'views/acceptance/case_acceptance.html'
