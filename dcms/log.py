@@ -32,12 +32,12 @@ LOGGING_CONFIG = {
         },
     },
     'loggers': {
-        'mercury': {
+        'dcms': {
             'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': True
         },
-        'mercury.api': {
+        'dcms.api': {
             'handlers': ['default'],
             'level': 'DEBUG',
             'propagate': True

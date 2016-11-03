@@ -24,3 +24,8 @@ class MercuryError(Exception):
 class IllegalArgumentError(MercuryError):
     """非法的参数
     """
+
+
+class MapApiError(MercuryError):
+    """地图API调用异常
+    """

@@ -16,7 +16,9 @@ var dcmsApp = angular.module('dcmsApp', [
 ]);
 
 dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
-    $urlRouterProvider.otherwise("/acceptance/caseAcceptance");
+    $urlRouterProvider.when('', '/home/dashboard');
+
+    $urlRouterProvider.otherwise("/404");
 
     $ocLazyLoadProvider.config({
        debug: false
@@ -60,13 +62,40 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
         //     url: "/register",
         //     templateUrl: "view/case/register.html"
         // })
+        .state('home', {
+            abstract: true,
+            url: '/home',
+            templateUrl: contentTemplatUrl
+        }).state('home.dashborad', {
+            url: '/dashboard',
+            templateUrl: 'views/acceptance/case_acceptance.html'
+        }).state('login', {
+            url: '/login',
+            templateUrl: 'views/account/login.html'
+        }).state('404', {
+            url: '/404',
+            templateUrl: 'views/common/error_404.html'
+        }).state('500', {
+            url: '/500',
+            templateUrl: 'views/common/error_500.html'
+        })
         .state('acceptance', {
             abstract: true,
             url: '/acceptance',
             templateUrl: contentTemplatUrl
         }).state('acceptance.caseAcceptance', {
             url: '/caseAcceptance',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'views/acceptance/case_acceptance.html',
+            resolve: {
+                loadPlugin: function ($ocLazyLoad) {
+                    return $ocLazyLoad.load([
+                        {
+                            name: 'superMap',
+                            files: ['map/locate.css']
+                        }
+                    ]);
+                }
+            }
         }).state('collaboration', {
             abstract: true,
             url: '/collaboration',
@@ -150,6 +179,11 @@ dcmsApp.run(function($rootScope, $state) {
     $rootScope.closeAlert = function(index) {
         this.alerts.splice(index, 1);
     };
+
+    $rootScope.$on('$stateChangeError', function(event) {
+        console.log("$stateChangeError: " + event);
+        $state.go('404');
+    });
 })
 .run(function($rootScope, Restangular) {
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {

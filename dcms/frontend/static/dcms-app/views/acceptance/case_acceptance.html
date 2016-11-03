@@ -1,2 +1,111 @@
 <div class="wrapper wrapper-content animated fadeInRight">
+  <div class="row">
+    <div class="col-md-6 form-compact-col" ng-controller="caseAcceptanceCtrl" ng-init="categoryTypeChanged()">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>案件受理</h5>
+        </div>
+        <div class="ibox-content">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <div class="col-md-6 form-compact-col">
+                <label class="col-md-4 control-label form-compact-col">事件来源</label>
+                <div class="col-md-8 form-compact-col">
+                  <select ng-options="source.id as source.name for source in caseSourceList" class="form-control" ng-model="submitCase.source">
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6 form-compact-col">
+                <label class="col-md-4 control-label form-compact-col">事件类别</label>
+                <div class="col-md-8 form-compact-col">
+                  <select ng-options="categoryType.id as categoryType.name for categoryType in caseCategoryTypeList"
+                          class="form-control" ng-model="submitCase.category_type"
+                          ng-change="categoryTypeChanged()">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6 form-compact-col">
+                <label class="col-md-4 control-label form-compact-col">所属大类</label>
+                <div class="col-md-8 form-compact-col">
+                  <select ng-options="parentCategory.longcode as parentCategory.name for parentCategory in caseParentCategoryList"
+                          class="form-control" ng-model="submitCase.parent_category_code"
+                          ng-change="caseParentCategoryChanged()">
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-6 form-compact-col">
+                <label class="col-md-4 control-label form-compact-col">所属小类</label>
+                <div class="col-md-8 form-compact-col">
+                  <select ng-options="category.longcode as category.name for category in caseCategoryList" class="form-control" ng-model="submitCase.category_code">
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label form-compact-col">所属网格</label>
+              <div class="col-md-6 form-compact-col">
+                <input class="form-control" ng-model="submitCase.grid_code" readonly>
+              </div>
+              <div class="col-md-3 col-md-offset-1 form-compact-col">
+                <a class="btn btn-primary" ui-sref="case.map">选择网格</a>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label form-compact-col">位置描述</label>
+              <div class="col-md-10 form-compact-col">
+                <textarea class="form-control" rows="2" ng-model="submitCase.address"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label form-compact-col">案件描述</label>
+              <div class="col-md-10 form-compact-col">
+                <textarea class="form-control" rows="3" ng-model="submitCase.description"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6 form-compact-col">
+                <label class="col-md-4 control-label form-compact-col">举报人姓名</label>
+                <div class="col-md-8 form-compact-col">
+                  <input class="form-control" ng-model="submitCase.reporter_name"/>
+                </div>
+              </div>
+              <div class="col-md-6 form-compact-col">
+                <label class="col-md-4 control-label form-compact-col">举报人电话</label>
+                <div class="col-md-8 form-compact-col">
+                  <input class="form-control" ng-model="submitCase.reporter_phone"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label form-compact-col">举报人地址</label>
+              <div class="col-md-10 form-compact-col">
+                <input class="form-control" ng-model="submitCase.reporter_address"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-md-2 control-label form-compact-col">案件备注</label>
+              <div class="col-md-10 form-compact-col">
+                <input class="form-control" ng-model="submitCase.remark"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-primary col-md-offset-3 col-md-6 form-compact-col" type="submit" ng-click="submit()"><strong>登记事件</strong></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 form-compact-col" ng-controller="mapLocateCtrl" ng-init="init()">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>地图定位</h5>
+        </div>
+        <div class="ibox-content" style="margin:0;overflow:hidden;background:#fff;">
+          <div id="map"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

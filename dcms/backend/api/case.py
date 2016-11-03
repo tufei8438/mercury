@@ -18,6 +18,7 @@ from flask_restful import Api
 from flask_restful.reqparse import Argument
 
 from dcms.backend.api import ApiResource
+from dcms.backend.map import MapApi
 from dcms.backend.service.case import CaseService, CategoryService
 from dcms.backend.models import Case, Category
 from dcms.backend.generator import CodeGenerator
@@ -79,3 +80,17 @@ class CategoryListResource(ApiResource):
         parent_code = self.get_argument('parent_code')
 
         return CategoryService().get_categories(parent_code, category_type)
+
+
+@api.resource('/cases/grid')
+class GridResource(ApiResource):
+
+    _query_arguments = [
+        Argument('x'),
+        Argument('y'),
+    ]
+
+    def get(self):
+        x = self.get_argument('x')
+        y = self.get_argument('y')
+        return MapApi().get_map_grid(x, y)

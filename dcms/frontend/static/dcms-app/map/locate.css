@@ -1,0 +1,10 @@
+#map{
+    position: relative;
+    height: 500px;
+    border:1px solid #3473b7;
+}
+#toolbar {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
