@@ -1,77 +1,112 @@
-<div ng-controller="departmentCtrl">
-  <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="ibox float-e-margins">
-          <div class="ibox-title">
-            <h5>
-              <small>部门列表</small>
-            </h5>
-          </div>
-          <div class="ibox-content">
-            <div js-tree="departmentTreeConfig" ng-model="departmentTreeData" tree="treeInstance"
-                 tree-events="ready:departmentTreeReadyCB">
-            </div>
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="departmentCtrl" ng-init="reCreateDepartmentTree()">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>
+            <small>部门列表</small>
+          </h5>
+        </div>
+        <div class="ibox-content">
+          <div js-tree="departmentTreeConfig" ng-model="departmentTreeData" tree="treeInstance"
+               tree-events="ready:departmentTreeReadyCB;changed:treeNodeChangedCB;">
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="row">
-          <div class="ibox float-e-margins">
-            <div class="ibox-content">
-              <form class="form-horizontal">
-                <h3>添加原料分类</h3>
-                <div class="form-group">
-                  <label class="col-lg-2 control-label">上级分类</label>
-                  <div class="col-lg-10">
-                    <select class="form-control"
-                            ng-options="category.id as category.name for category in categories| orderBy: 'id'"
-                            ng-model="categoryAdd.parent_id">
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-lg-2 control-label">分类名称</label>
-                  <div class="col-lg-10">
-                    <input type="text" placeholder="分类名称" class="form-control" ng-model="categoryAdd.name">
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-lg-offset-2 col-lg-10">
-                    <button class="btn btn-default btn-white" ng-click="addCategory()">添 加</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
+    </div>
+    <div class="col-md-8">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>
+            <small>部门信息</small>
+          </h5>
         </div>
-        <div class="row">
-          <div class="ibox float-e-margins">
-            <div class="ibox-content">
-              <form class="form-horizontal">
-                <h3>修改原料分类</h3>
-                <div class="form-group">
-                  <label class="col-lg-2 control-label">选择分类</label>
-                  <div class="col-lg-10">
-                    <select class="form-control">
-                      <option>热菜</option>
-                      <option>冷菜</option>
-                      <option>酒水</option>
+        <div class="ibox-content">
+          <div class="row">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-6 form-compact-col">
+                  <label class="col-md-4 control-label form-compact-col">部门名称</label>
+                  <div class="col-md-8 form-compact-col">
+                    <input class="form-control" ng-model="selectedDept.name">
+                  </div>
+                </div>
+                <div class="col-md-6 form-compact-col">
+                  <label class="col-md-4 control-label form-compact-col">部门编码</label>
+                  <div class="col-md-8 form-compact-col">
+                    <input class="form-control" ng-model="selectedDept.code" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-6 form-compact-col">
+                  <label class="col-md-4 control-label form-compact-col">部门类型</label>
+                  <div class="col-md-8 form-compact-col">
+                    <select ng-options="departmentType.id as departmentType.name for departmentType in departmentTypeList"
+                            class="form-control" ng-model="selectedDept.type">
                     </select>
                   </div>
                 </div>
-                <div class="form-group">
-                  <label class="col-lg-2 control-label">分类名称</label>
-                  <div class="col-lg-10">
-                    <input type="text" placeholder="新分类名称" class="form-control">
+                <div class="col-md-6 form-compact-col">
+                  <label class="col-md-4 control-label form-compact-col">部门状态</label>
+                  <div class="col-md-8 form-compact-col">
+                    <select ng-options="departmentStatus.id as departmentStatus.name for departmentStatus in departmentStatusList"
+                            class="form-control" ng-model="selectedDept.status">
+                    </select>
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="col-lg-offset-2 col-lg-10">
-                    <button class="btn btn-default btn-white" type="submit">修 改</button>
+              </div>
+              <div class="form-group">
+                <div class="col-md-6 form-compact-col">
+                  <label class="col-md-4 control-label form-compact-col">部门地区</label>
+                  <div class="col-md-8 form-compact-col">
+                    <select ng-options="district.id as district.name for district in districtList"
+                            class="form-control" ng-model="selectedDept.region_id">
+                    </select>
                   </div>
                 </div>
-              </form>
+                <div class="col-md-6 form-compact-col">
+                  <label class="col-md-4 control-label form-compact-col">创建时间</label>
+                  <div class="col-md-8 form-compact-col">
+                    <input class="form-control" ng-model="selectedDept.create_time" readonly>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-6 form-compact-col">
+                  <label class="col-md-4 control-label form-compact-col">部门描述</label>
+                  <div class="col-md-8 form-compact-col">
+                    <input class="form-control" ng-model="selectedDept.description">
+                  </div>
+                </div>
+                <div class="col-md-6 form-compact-col">
+                  <div class="col-md-offset-4 col-md-8 form-compact-col">
+                    <button class="btn btn-primary form-control">修改部门信息</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="row">
+            <div class="col-md-6 form-compact-col">
+              <ul>
+                <li class="divider"></li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+              </ul>
+            </div>
+            <div class="col-md-6 form-compact-col">
+              <ul class="nav nav-divider">
+                <li class="divider"></li>
+                <li>张三</li>
+                <li>李四</li>
+                <li>王五</li>
+                <li>赵六</li>
+                <li>刘七</li>
+              </ul>
             </div>
           </div>
         </div>

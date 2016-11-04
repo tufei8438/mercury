@@ -29,3 +29,8 @@ class IllegalArgumentError(MercuryError):
 class MapApiError(MercuryError):
     """地图API调用异常
     """
+
+
+class DatabaseError(MercuryError):
+    """数据库错误
+    """

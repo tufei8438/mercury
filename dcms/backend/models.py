@@ -50,7 +50,11 @@ class BaseModel(db.Model):
         sa_instance_state = getattr(self, ClassManager.STATE_ATTR, None)
         if sa_instance_state:
             attr_dct = sa_instance_state.attrs._data
-            return attr_dct.keys()
+            attribute_names = attr_dct.keys()
+            for name in self.__dict__:
+                if not name.startswith('_') and name not in attr_dct:
+                    attribute_names.append(name)
+            return attribute_names
         return self.__dict__
 
     def from_dict(self, dicts):
@@ -179,6 +183,7 @@ class Department(BaseModel):
     code = db.Column(db.String(32), nullable=False, unique=True, server_default=db.text("''"))
     type = db.Column(db.Integer)
     name = db.Column(db.String(64))
+    region_id = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(512))
     status = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
     create_time = db.Column(db.DateTime, nullable=False, server_default=db.text("CURRENT_TIMESTAMP"))

@@ -16,6 +16,7 @@ maintenanceCtrlApp.controller('departmentCtrl', ['$scope', '$log', 'Restangular'
                 check_callback : true,
                 worker : true
          },
+        "version": 1,
         "plugins" : ["types", "dnd"],
         "types" : {
             "default" : {
@@ -24,20 +25,15 @@ maintenanceCtrlApp.controller('departmentCtrl', ['$scope', '$log', 'Restangular'
         }
     };
 
-    var getDepartments = function() {
-        // departmentService.getList().then(function(departments) {
-        //     $scope.departmentTreeData = $scope.createDepartmentTree(departments);
-        //
-        //     $scope.departments = departments;
-        //     $scope.departments.push({
-        //         "id": 0,
-        //         "name": "根节点"
-        //     });
-        // });
-        $scope.departmentTreeData =  [ { "id": "ajson1", "parent": "#", "text": "Simple root node", "state": { "opened": true }, "__uiNodeId": 9 }, { "id": "ajson2", "parent": "#", "text": "Root node 2", "state": { "opened": true }, "__uiNodeId": 10 }, { "id": "ajson3", "parent": "ajson2", "text": "Child 1", "state": { "opened": true }, "__uiNodeId": 11 }, { "id": "ajson4", "parent": "ajson2", "text": "Child 2", "state": { "opened": true }, "__uiNodeId": 12 }, { "id": "1", "parent": "ajson1", "text": "Async Loaded", "__uiNodeId": 13 } ];
+    $scope.reCreateDepartmentTree = function() {
+        departmentService.getList().then(function(departments) {
+            $scope.departments = departments;
+            $scope.departmentTreeData = $scope.getTreeData(departments);
+            $scope.departmentTreeConfig.version++;
+        });
     };
 
-    $scope.createDepartmentTree = function(departments) {
+    $scope.getTreeData = function(departments) {
         var treeData = [];
         for (var i = 0; i < departments.length; ++i) {
             var department = departments[i];
@@ -50,15 +46,78 @@ maintenanceCtrlApp.controller('departmentCtrl', ['$scope', '$log', 'Restangular'
                 },
                 "__uiNodeId": department.id
             };
-            $log.error('treeNode:' + angular.toJson(treeNode));
             treeData.push(treeNode);
+
+            if (department.parent_id == 0) {
+                $scope.selectedDept = department;
+            }
         }
         return treeData;
     };
 
+    $scope.departmentTypeList = [
+        {id: 1, name: '城管系统部门'},
+        {id: 2, name: '城管专业部门'}
+    ];
+
+    $scope.departmentStatusList = [
+        {id: 1, name: '正常'},
+        {id: 0, name: '停用'}
+    ];
+
+    // $scope.districtList = [
+    //     {id: 1, name: '丰满区'},
+    //     {id: 2, name: '西城区'},
+    //     {id: 3, name: '朝阳区'},
+    //     {id: 4, name: '海淀区'}
+    // ];
+
+    // $scope.selectedDept = {
+    //     name: '城管办公室',
+    //     code: '00001',
+    //     region_id: 3,
+    //     create_time: '2016-09-09',
+    //     status: 1,
+    //     type: 1,
+    //     description: '监督处理的核心部门'
+    // };
+
     $scope.departmentTreeData = [];
     $scope.departmentTreeReadyCB = function() {
-        getDepartments();
+
+    };
+
+    $scope.treeNodeChangedCB = function() {
+        var selectedNode = $scope.treeInstance.jstree(true).get_selected();
+        for (var i = 0; i < $scope.departments.length; ++i) {
+            var department = $scope.departments[i];
+            if (department.id == selectedNode[0]) {
+                $scope.selectedDept = department;
+                break;
+            }
+        }
+    };
+
+    $scope.districtList = departmentService.all('districts').getList().$object;
+
+    $scope.getDepartmentUsers = function(departmentId) {
+        $scope.departmentName = $scope.departments;
+        departmentService.all('users').getList({'department_id': departmentId}).then(function(deptUsers) {
+            $scope.deptUsers = deptUsers;
+        });
     };
 
 }]);
+
+// maintenanceCtrlApp.controller('modalDepartmentUpdateCtrl', ['$scope', '$modalInstance', 'department', 'Restangular', function ($scope, $modalInstance, department, Restangular) {
+//     $scope.department = department;
+//
+//     $scope.modalSubmit = function() {
+//         Restangular.angular
+//         $modalInstance.close();
+//     };
+//
+//     $scope.modalCancel = function() {
+//         $modalInstance.dismiss('cancel');
+//     };
+// }]);
