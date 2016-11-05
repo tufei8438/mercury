@@ -16,7 +16,9 @@
 # limitations under the License.
 import datetime
 from dcms.backend import cache, db
+from dcms.backend.generator import CodeGenerator
 from dcms.backend.models import Case, Category
+from dcms.backend.service import DatabaseService, transactional
 from dcms.errors import IllegalArgumentError
 
 
@@ -36,13 +38,17 @@ class CategoryService(object):
             filter(Category.longcode == category_code).first()
 
 
-class CaseService(object):
+class CaseService(DatabaseService):
 
+    @transactional
     def register_case(self, case):
         """案件登记
         """
         if not isinstance(case, Case):
             raise IllegalArgumentError("无效的case参数类型")
+
+        if case.code is None:
+            case.code = CodeGenerator.gen_case_code()
 
         if case.parent_category_code and not case.parent_category_name:
             parent_category = CategoryService().get_category(
@@ -61,6 +67,5 @@ class CaseService(object):
             case.begin_time = now
             case.expect_end_time = now + datetime.timedelta(minutes=30)
 
-        db.session.add(case)
-        db.session.commit()
+        self.insert(case)
         return case
