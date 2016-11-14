@@ -6,6 +6,7 @@ var dcmsApp = angular.module('dcmsApp', [
     'ui.bootstrap',                 // Ui Bootstrap
     'ngSanitize',                   // ngSanitize
     'restangular',                  // restangular
+    'dcmsApp.services',
     'mainCtrlApp',
     'acceptanceCtrlApp',
     'basedataCtrlApp',
@@ -24,7 +25,7 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
        debug: false
     });
 
-    var contentTemplatUrl = "views/common/content.html";
+    var contentTemplatUrl = "dcms-app/views/common/content.html";
 
     $stateProvider
         // .state('material', {
@@ -68,16 +69,16 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             templateUrl: contentTemplatUrl
         }).state('home.dashborad', {
             url: '/dashboard',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('login', {
             url: '/login',
-            templateUrl: 'views/account/login.html'
+            templateUrl: 'dcms-app/views/account/login.html'
         }).state('404', {
             url: '/404',
-            templateUrl: 'views/common/error_404.html'
+            templateUrl: 'dcms-app/views/common/error_404.html'
         }).state('500', {
             url: '/500',
-            templateUrl: 'views/common/error_500.html'
+            templateUrl: 'dcms-app/views/common/error_500.html'
         })
         .state('acceptance', {
             abstract: true,
@@ -85,7 +86,7 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             templateUrl: contentTemplatUrl
         }).state('acceptance.caseAcceptance', {
             url: '/caseAcceptance',
-            templateUrl: 'views/acceptance/case_acceptance.html',
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html',
             resolve: {
                 loadPlugin: function ($ocLazyLoad) {
                     return $ocLazyLoad.load([
@@ -96,92 +97,106 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
                     ]);
                 }
             }
+        }).state('acceptance.mapLocate', {
+            url: '/mapLocate',
+            templateUrl: 'dcms-app/views/acceptance/map_grid_locate.html'
         }).state('collaboration', {
             abstract: true,
             url: '/collaboration',
             templateUrl: contentTemplatUrl
         }).state('collaboration.taskDispatch', {
             url: '/taskDispatch',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('collaboration.caseSupervise', {
             url: '/caseSupervise',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('collaboration.timing', {
             url: '/timing',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('command', {
             abstract: true,
             url: '/command',
             templateUrl: contentTemplatUrl
         }).state('command.map', {
             url: '/map',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('command.tracking', {
             url: '/tracking',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('command.video', {
             url: '/video',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('evaluation', {
             abstract: true,
             url: '/evaluation',
             templateUrl: contentTemplatUrl
         }).state('evaluation.rule', {
             url: '/rule',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('evaluation.region', {
             url: '/region',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('evaluation.department', {
             url: '/department',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('evaluation.staff', {
             url: '/staff',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('maintenance', {
             abstract: true,
             url: '/workflow',
             templateUrl: contentTemplatUrl
         }).state('maintenance.orgStructure', {
             url: '/orgStructure',
-            templateUrl: 'views/maintenance/departments.html',
+            templateUrl: 'dcms-app/views/maintenance/departments.html',
             resolve: {
                  loadPlugin: function ($ocLazyLoad) {
                      return $ocLazyLoad.load([
                          {
-                             files: ['js/lib/bower_components/jstree/dist/themes/default/style.css',
-                                 'js/lib/bower_components/jstree/dist/jstree.js']
+                             files: ['dcms-app/js/lib/bower_components/jstree/dist/themes/default/style.css',
+                                 'dcms-app/js/lib/bower_components/jstree/dist/jstree.js']
                          },
                          {
                              name: 'ngJsTree',
-                             files: ['js/lib/bower_components/ng-js-tree/dist/ngJsTree.js']
+                             files: ['dcms-app/js/lib/bower_components/ng-js-tree/dist/ngJsTree.js']
                          }
                      ]);
                  }
              }
         }).state('maintenance.permission', {
             url: '/permission',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('basedata', {
             abstract: true,
             url: '/basedata',
             templateUrl: contentTemplatUrl
         }).state('basedata.component', {
             url: '/component',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('basedata.category', {
             url: '/category',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('basedata.configuration', {
             url: '/configuration',
-            templateUrl: 'views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         })
 
 });
 
-dcmsApp.run(function($rootScope, $state) {
+dcmsApp.run(function($rootScope, $state, $stateParams) {
     $rootScope.$state = $state;
+    $rootScope.$stateParams = $stateParams;
     $rootScope.alerts = [];
+
+    $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
+        // to be used for back button. won't work when page is reloaded.
+        $rootScope.previousState_name = fromState.name;
+        $rootScope.previousState_params = fromParams;
+    });
+
+    $rootScope.stateGoBack = function() {
+        $state.go($rootScope.previousState_name, $rootScope.previousState_params);
+    };
 
     /**
      * addAlert, closeAlert  - used to manage alerts in Notifications and Tooltips view

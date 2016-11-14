@@ -16,6 +16,7 @@
 # limitations under the License.
 import datetime
 from dcms.backend import cache, db
+from dcms.backend.activiti import ProcessInstance
 from dcms.backend.generator import CodeGenerator
 from dcms.backend.models import Case, Category
 from dcms.backend.service import DatabaseService, transactional
@@ -41,8 +42,8 @@ class CategoryService(object):
 class CaseService(DatabaseService):
 
     @transactional
-    def register_case(self, case):
-        """案件登记
+    def create_case(self, case):
+        """创建一个新的案件
         """
         if not isinstance(case, Case):
             raise IllegalArgumentError("无效的case参数类型")
@@ -68,4 +69,15 @@ class CaseService(DatabaseService):
             case.expect_end_time = now + datetime.timedelta(minutes=30)
 
         self.insert(case)
+
+        # 调用工作流API启动案件流程
+        variables = list()
+        variables.append(dict(name='case_id', value=case.id))
+        variables.append(dict(name='case_code', value=case.code))
+        variables.append(dict(name='case_source', value=case.source))
+        variables.append(dict(name='case_category_type', value=case.category_type))
+        variables.append(dict(name='case_parent_category_code', value=case.parent_category_code))
+        variables.append(dict(name='case_category_code', value=case.category_code))
+        ProcessInstance().start('dcmsProcess', variables=variables)
+
         return case

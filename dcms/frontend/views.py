@@ -15,7 +15,7 @@
 # under the License.
 from flask import Blueprint
 
-bp = Blueprint('dcmsFrontend', __name__, static_url_path='', static_folder='static/dcms-app')
+bp = Blueprint('dcmsFrontend', __name__, static_url_path='', static_folder='static')
 
 
 @bp.route('/')

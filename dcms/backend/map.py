@@ -25,6 +25,7 @@ class MapApi(object):
     MAP_SERVICE_URL = 'http://182.48.115.38:28088/dataService/mapService'
 
     def get_map_grid(self, x, y):
+        x, y = self.mc_to_ll(float(x), float(y))
         parameters = {
             'method': 'grid',
             'x': x,

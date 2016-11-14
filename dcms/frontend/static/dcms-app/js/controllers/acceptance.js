@@ -2,7 +2,7 @@
 
 var acceptanceCtrlApp = angular.module('acceptanceCtrlApp', []);
 
-acceptanceCtrlApp.controller('caseAcceptanceCtrl', ['$scope', '$log', 'Restangular', function($scope, $log, Restangular) {
+acceptanceCtrlApp.controller('caseAcceptanceCtrl', function($scope, $log, Restangular, MapService, $uibModal) {
     var caseService = Restangular.all("/api/cases");
 
     $scope.submitCase = {
@@ -12,7 +12,7 @@ acceptanceCtrlApp.controller('caseAcceptanceCtrl', ['$scope', '$log', 'Restangul
         category_type: 1,
         parent_category_code: '01',
         category_code: '01',
-        grid_code: '',
+        grid_code: MapService.getCurrentGrid().code,
         address: '',
         description: '',
         reporter_name: '',
@@ -60,15 +60,26 @@ acceptanceCtrlApp.controller('caseAcceptanceCtrl', ['$scope', '$log', 'Restangul
         getCategoryList();
     };
 
+    $scope.mapLocate = function() {
+        $uibModal.open({
+            animation: true,
+            templateUrl: 'modalMapLocate.html',
+            controller: 'mapLocateCtrl',
+            size: 'lg',
+        });
+    };
+
     $scope.submit = function() {
         caseService.post($scope.submitCase).then(function(caseObj) {
             alert('提交成功');
         });
     };
 
-}]);
+});
 
-acceptanceCtrlApp.controller('mapLocateCtrl', ['$scope', '$log', 'Restangular', function($scope, $log, Restangular) {
+acceptanceCtrlApp.controller('mapLocateCtrl', function($scope, $log, Restangular, MapService) {
+    $scope.bgCode = undefined;
+
     var map, layer, vectorLayer, vectorLayer1,drawPoint, style = {
             strokeColor: "#FF6733",
             strokeWidth: 1,
@@ -173,6 +184,27 @@ acceptanceCtrlApp.controller('mapLocateCtrl', ['$scope', '$log', 'Restangular', 
         clearStatus();
         drawPoint.activate();
     }
+
+    function clearFeatures() {
+        vectorLayer.removeAllFeatures();
+        vectorLayer1.removeAllFeatures();
+        // markerLayer.clearMarkers();
+    }
+    function clearStatus(){
+        vectorLayer.removeAllFeatures();
+        vectorLayer1.removeAllFeatures();
+
+    }
+    function stopquery(){
+        drawPoint.deactivate();
+        clearStatus();
+    }
+    $scope.selectGrid = function() {
+        MapService.setCurrentGrid($scope.bgCode, x, y);
+        closeInfoWin();
+        $scope.stateGoBack();
+    };
+
     var x, y;
     function drawPointCompleted(drawGeometryArgs) {
         var feature = new SuperMap.Feature.Vector();
@@ -185,8 +217,8 @@ acceptanceCtrlApp.controller('mapLocateCtrl', ['$scope', '$log', 'Restangular', 
         Restangular.one('/api/cases/grid').get({'x':x, 'y':y}).then(function(data) {
             if(data.flag) {
                 clearFeatures();
-                console.log(data);
                 var bgcode = data.code;
+                $scope.bgCode = bgcode;
                 var point_list = data.point_list;
                 var gridFeature = new SuperMap.Feature.Vector();
 
@@ -210,7 +242,7 @@ acceptanceCtrlApp.controller('mapLocateCtrl', ['$scope', '$log', 'Restangular', 
                     "popwin",
                     new SuperMap.LonLat(lonlat.lon, lonlat.lat),
                     null,
-                    "<div><a id='code'>" + bgcode + "</a><br><input type='button' value='确定' onclick='bg_ok()'></input></div>",
+                    '<div><a id="code">' + bgcode + '</a><br><button class="btn btn-default btn-sm" onclick="gridOk()">确认</button></div>',
                     icon,
                     true
                 );
@@ -223,28 +255,10 @@ acceptanceCtrlApp.controller('mapLocateCtrl', ['$scope', '$log', 'Restangular', 
             }
         });
 
+        $scope.cancel = function() {
+            $uibModalInstance.dismiss('cancel');
+        };
 
     }
-
-    function clearFeatures() {
-        vectorLayer.removeAllFeatures();
-        vectorLayer1.removeAllFeatures();
-        // markerLayer.clearMarkers();
-    }
-    function clearStatus(){
-        vectorLayer.removeAllFeatures();
-        vectorLayer1.removeAllFeatures();
-
-    }
-    function stopquery(){
-        drawPoint.deactivate();
-        clearStatus();
-    }
-    function bg_ok(){
-        sessionStorage["bg_code"] = document.getElementById('code').innerHTML;
-        sessionStorage["point_x"] = x;
-        sessionStorage["point_y"] = y;
-        window.history.back();
-    }
-}]);
+});
 

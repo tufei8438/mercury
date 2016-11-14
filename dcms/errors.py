@@ -34,3 +34,17 @@ class MapApiError(MercuryError):
 class DatabaseError(MercuryError):
     """数据库错误
     """
+
+
+class WorkflowError(MercuryError):
+    """工作流异常
+    """
+
+    def __init__(self, code, msg):
+        self.code = code
+        self.msg = msg
+
+
+class GatewayError(MercuryError):
+    """
+    """
