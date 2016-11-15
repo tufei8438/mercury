@@ -17,6 +17,7 @@
 import requests
 
 from dcms.errors import WorkflowError
+from dcms.log import api_log
 
 
 class WorkflowApi(object):
@@ -27,8 +28,10 @@ class WorkflowApi(object):
 
     def request(self, method, path, **kwargs):
         auth = (self._auth_basic_user, self._auth_basic_pwd)
+        api_log.debug("[Activiti API REQ] method: {} url: {}".format(method, self.url(path)))
         r = requests.request(method, self.url(path), auth=auth, **kwargs)
         r_body = r.json()
+        api_log.debug("[Activiti API RES] status: {} body: {}".format(r.status_code, r_body))
         if r.status_code in [200, 201, 204]:
             return r_body
         else:

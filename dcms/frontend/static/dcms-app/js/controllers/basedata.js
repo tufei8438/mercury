@@ -1,3 +1,3 @@
 'use strict';
 
-var basedataCtrlApp = angular.module('basedataCtrlApp', []);
+var basedataCtrlApp = angular.module('dcmsApp.basedataCtrl', []);

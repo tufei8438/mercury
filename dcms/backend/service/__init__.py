@@ -59,7 +59,7 @@ class DatabaseService(object):
 
 
 def transactional(func):
-    @functools.wraps
+    @functools.wraps(func)
     def decorator(self, *args, **kwargs):
         assert isinstance(self, DatabaseService)
         try:

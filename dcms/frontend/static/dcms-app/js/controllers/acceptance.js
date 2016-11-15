@@ -1,8 +1,41 @@
 'use strict';
 
-var acceptanceCtrlApp = angular.module('acceptanceCtrlApp', []);
+var acceptanceCtrlApp = angular.module('dcmsApp.acceptanceCtrl', []);
 
-acceptanceCtrlApp.controller('caseAcceptanceCtrl', function($scope, $log, Restangular, MapService, $uibModal) {
+acceptanceCtrlApp.filter('caseCategoryTypeFilter', function() {
+    var caseCategoryTypeList = [
+        {'id': 1, 'name': '部件上报'},
+        {'id': 2, 'name': '事件上报'}
+    ];
+
+    return function(categoryType) {
+        for (var i = 0; i < caseCategoryTypeList.length; ++i) {
+            if (categoryType == caseCategoryTypeList[i].id) {
+                return caseCategoryTypeList[i].name;
+            }
+        }
+        return undefined;
+    }
+});
+
+acceptanceCtrlApp.filter('caseStatusFilter', function() {
+    var caseStatusList = [
+        {'id': 1, 'name': '已创建'},
+        {'id': 2, 'name': '已完成'},
+        {'id': 3, 'name': '已取消'}
+    ];
+
+    return function (status) {
+        for (var i = 0; i < caseStatusList.length; ++i) {
+            if (status == caseStatusList[i].id) {
+                return caseStatusList[i].name;
+            }
+        }
+        return undefined;
+    }
+});
+
+acceptanceCtrlApp.controller('CaseAcceptanceCtrl', function($scope, $log, Restangular, MapService, $uibModal) {
     var caseService = Restangular.all("/api/cases");
 
     $scope.submitCase = {
@@ -77,7 +110,7 @@ acceptanceCtrlApp.controller('caseAcceptanceCtrl', function($scope, $log, Restan
 
 });
 
-acceptanceCtrlApp.controller('mapLocateCtrl', function($scope, $log, Restangular, MapService) {
+acceptanceCtrlApp.controller('MapLocateCtrl', function($scope, $log, Restangular, MapService) {
     $scope.bgCode = undefined;
 
     var map, layer, vectorLayer, vectorLayer1,drawPoint, style = {
@@ -260,5 +293,11 @@ acceptanceCtrlApp.controller('mapLocateCtrl', function($scope, $log, Restangular
         };
 
     }
+});
+
+acceptanceCtrlApp.controller('CaseQueryCtrl', function($scope, Restangular) {
+    var caseService = Restangular.all('/api/cases');
+
+    $scope.caseList = caseService.getList().$object;
 });
 

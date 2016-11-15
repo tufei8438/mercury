@@ -1,10 +1,10 @@
 'use strict';
 
-var services = angular.module('dcmsApp.services', []);
+var services = angular.module('dcmsApp.services', ['restangular']);
 
-services.factory('MapService', [function() {
+services.factory('MapService', function() {
     var currentGrid = {
-        code: '',
+        code: '22021107010701',
         x: '',
         y: ''
     };
@@ -20,4 +20,15 @@ services.factory('MapService', [function() {
             currentGrid.y = y;
         }
     };
-}]);
+});
+
+
+services.factory('ActivitiService', function (Restangular) {
+    return {
+        queryCaseTasks: function() {
+            var params = {
+
+            };
+        }
+    }
+});

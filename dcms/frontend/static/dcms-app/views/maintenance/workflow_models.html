@@ -1,0 +1,69 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="ActivitiModelCtrl">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>流程定义模型列表</h5>
+          <button class="btn btn-primary btn-sm pull-right" ng-click="createModel()">新建模型</button>
+        </div>
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <thead>
+              <tr>
+                <th>模型名称</th>
+                <th>模型版本</th>
+                <th>创建时间</th>
+                <th>更新时间</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="model in models">
+                <td>{{ model.name }}</td>
+                <td>{{ model.version }}</td>
+                <td>{{ model.createTime | date: 'yyyy-MM-dd hh:mm:ss' }}</td>
+                <td>{{ model.lastUpdateTime | date: 'yyyy-MM-dd hh:mm:ss' }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm" ng-click="editModel(model)">编辑</button>
+                  <button class="btn btn-primary btn-sm" ng-click="deleteModel(model)">删除</button>
+                  <button class="btn btn-primary btn-sm" ng-click="deployModel(model)" ng-disabled="!model.sourceExtraUrl">部署</button>
+                  <button class="btn btn-primary btn-sm" ng-click="exportModel(model)" ng-disabled="!model.sourceExtraUrl">导出</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type=" text/ng-template" id="modalNewModel.html">
+    <div class="inmodal">
+      <div class="modal-header">
+          <i class="fa fa-laptop modal-icon"></i>
+          <h4 class="modal-title">新建模型</h4>
+      </div>
+      <div class="modal-body">
+          <form name="newModelForm" class="form-horizontal">
+              <div class="form-group">
+                  <label class="col-lg-2 control-label">名称</label>
+                  <div class="col-lg-10">
+                      <input type="text" placeholder="名称" class="form-control" ng-model="model.name">
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label class="col-lg-2 control-label">描述</label>
+                  <div class="col-lg-10">
+                      <input type="text" placeholder="描述" class="form-control" ng-model="model.description">
+                  </div>
+              </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-white" ng-click="modalCancel()">取 消</button>
+          <button type="button" class="btn btn-primary" ng-click="modalSubmit()">确 定</button>
+      </div>
+    </div>
+  </script>
+</div>

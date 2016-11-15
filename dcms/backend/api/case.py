@@ -35,7 +35,8 @@ class CaseListResource(ApiResource):
 
     def post(self):
         case = self.parse_body_to_model(Case)
-        return CaseService().register_case(case)
+        db_case = CaseService().create_case(case)
+        return db_case
 
 
 @api.resource('/cases/codes')

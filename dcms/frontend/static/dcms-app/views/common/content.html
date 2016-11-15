@@ -1,27 +1,28 @@
 <!-- Wrapper-->
 <div id="wrapper">
 
-    <!-- Navigation -->
-    <div ng-include="main.navigationTemplatePath"></div>
+  <!-- Navigation -->
+  <div ng-include="main.navigationTemplatePath"></div>
 
-    <!-- Page wraper -->
-    <!-- ng-class with current state name give you the ability to extended customization your view -->
-    <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
+  <!-- Page wraper -->
+  <!-- ng-class with current state name give you the ability to extended customization your view -->
+  <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
 
-        <!-- Page wrapper -->
-        <div ng-include="main.topnavbarTemplatePath"></div>
+    <!-- Page wrapper -->
+    <div ng-include="main.topnavbarTemplatePath"></div>
 
-        <!-- Main view  -->
-        <div ui-view></div>
+    <!-- Main view  -->
+    <div uib-alert ng-repeat="alert in alerts" ng-class="'alert-' + (alert.type || 'warning')" close="closeAlert($index)">{{alert.msg}}</div>
+    <div ui-view></div>
 
-        <!-- Footer -->
-        <div ng-include="main.footerTemplatePath"></div>
+    <!-- Footer -->
+    <div ng-include="main.footerTemplatePath"></div>
 
-    </div>
-    <!-- End page wrapper-->
+  </div>
+  <!-- End page wrapper-->
 
-    <!-- Right Sidebar -->
-    <!--<div ng-include="main.rightSidebarTemplatePath"></div>-->
+  <!-- Right Sidebar -->
+  <!--<div ng-include="main.rightSidebarTemplatePath"></div>-->
 
 </div>
 <!-- End wrapper-->

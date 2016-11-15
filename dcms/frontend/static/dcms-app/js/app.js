@@ -7,13 +7,13 @@ var dcmsApp = angular.module('dcmsApp', [
     'ngSanitize',                   // ngSanitize
     'restangular',                  // restangular
     'dcmsApp.services',
-    'mainCtrlApp',
-    'acceptanceCtrlApp',
-    'basedataCtrlApp',
-    'collaborationCtrlApp',
-    'commandCtrlApp',
-    'evaluationCtrlApp',
-    'maintenanceCtrlApp'
+    'dcmsApp.mainCtrl',
+    'dcmsApp.acceptanceCtrl',
+    'dcmsApp.basedataCtrl',
+    'dcmsApp.collaborationCtrl',
+    'dcmsApp.commandCtrl',
+    'dcmsApp.evaluationCtrl',
+    'dcmsApp.maintenanceCtrl'
 ]);
 
 dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider) {
@@ -69,7 +69,7 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             templateUrl: contentTemplatUrl
         }).state('home.dashborad', {
             url: '/dashboard',
-            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/home/dashboard.html'
         }).state('login', {
             url: '/login',
             templateUrl: 'dcms-app/views/account/login.html'
@@ -97,6 +97,9 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
                     ]);
                 }
             }
+        }).state('acceptance.caseQuery', {
+            url: '/caseQuery',
+            templateUrl: 'dcms-app/views/acceptance/case_query.html'
         }).state('acceptance.mapLocate', {
             url: '/mapLocate',
             templateUrl: 'dcms-app/views/acceptance/map_grid_locate.html'
@@ -144,8 +147,11 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         }).state('maintenance', {
             abstract: true,
-            url: '/workflow',
+            url: '/maintenance',
             templateUrl: contentTemplatUrl
+        }).state('maintenance.workflow', {
+            url: '/workflow',
+            templateUrl: 'dcms-app/views/maintenance/workflow_models.html'
         }).state('maintenance.orgStructure', {
             url: '/orgStructure',
             templateUrl: 'dcms-app/views/maintenance/departments.html',
@@ -181,6 +187,20 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
         })
 
+});
+
+dcmsApp.config(function(RestangularProvider) {
+    RestangularProvider.addResponseInterceptor(function(data, operation, what, url, response, deferred) {
+        if (operation === "getList") {
+            if (data.constructor == Array) {
+                return data;
+            } else {
+                return data['data'];
+            }
+        }
+
+        return data;
+    });
 });
 
 dcmsApp.run(function($rootScope, $state, $stateParams) {

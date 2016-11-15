@@ -1,8 +1,8 @@
 'use strict';
 
-var maintenanceCtrlApp = angular.module('maintenanceCtrlApp', []);
+var maintenanceCtrlApp = angular.module('dcmsApp.maintenanceCtrl', []);
 
-maintenanceCtrlApp.controller('departmentCtrl', ['$scope', '$log', 'Restangular', function($scope, $log, Restangular) {
+maintenanceCtrlApp.controller('DepartmentCtrl', ['$scope', '$log', 'Restangular', function($scope, $log, Restangular) {
 
     var departmentService = Restangular.all('/api/departments');
 
@@ -121,3 +121,77 @@ maintenanceCtrlApp.controller('departmentCtrl', ['$scope', '$log', 'Restangular'
 //         $modalInstance.dismiss('cancel');
 //     };
 // }]);
+
+maintenanceCtrlApp.controller('ModalNewModelCtrl', function($scope, $uibModalInstance, $state, Restangular) {
+    $scope.model = {
+        name: '',
+        description: '',
+        version: 1,
+        metaInfo: ''
+    };
+
+    $scope.modalSubmit = function() {
+        $scope.model.metaInfo = JSON.stringify({
+            name: $scope.model.name,
+            description: $scope.model.description,
+            version: $scope.model.version
+        });
+        delete $scope.model.description;
+        Restangular.all('/api/workflow/service/repository/models').post($scope.model).then(function(newModel) {
+            $uibModalInstance.close(newModel);
+        }, function(response) {
+            $scope.addAlert('danger', response.data.message);
+            console.log("Error with status code", response.status);
+        });
+
+    };
+
+    $scope.modalCancel = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+maintenanceCtrlApp.controller('ActivitiModelCtrl', function($scope, $uibModal, Restangular) {
+    var modelService = Restangular.all('/api/workflow/repository/models');
+    $scope.models = modelService.getList({'size': 20}).$object;
+
+    $scope.createModel = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'modalNewModel.html',
+            controller: 'ModalNewModelCtrl'
+        });
+
+        modalInstance.result.then(function(newModel) {
+            $scope.models = modelService.getList({'size': 20}).$object;
+            window.location.href='modeler.html?modelId=' + newModel.id;
+        });
+    };
+
+    $scope.editModel = function(model) {
+        window.location.href='modeler.html?modelId=' + model.id;
+    };
+
+    $scope.deleteModel = function(model) {
+        modelService.one(model.id).remove().then(function() {
+            $scope.addAlert('info', '设计模型：【' + model.name + '】删除成功');
+            $scope.models = modelService.getList({'size': 20}).$object;
+        }, function(resonse) {
+            $scope.addAlert('danger', response.data.message);
+            console.log("Error with status code", response.status);
+        });
+    };
+
+    $scope.deployModel = function(model) {
+        Restangular.all('/api/workflow/service/repository/deployments').
+        customPOST(undefined, undefined, {modelId: model.id}, {'Content-Type': "application/x-www-form-urlencoded; charset=UTF-8"}).
+        then(function() {
+            $scope.addAlert('info', '设计模型：【' + model.name + '】部署成功');
+        }, function(response) {
+            $scope.addAlert('danger', response.data.message);
+        });
+    };
+
+    $scope.exportModel = function(model) {
+        window.location.href = '/api/workflow/service/repository/models/' + model.id + '/xml';
+    }
+});

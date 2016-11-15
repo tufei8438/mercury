@@ -112,7 +112,7 @@ class Case(BaseModel):
     begin_time = db.Column(db.DateTime, default=func.now())
     end_time = db.Column(db.DateTime)
     expect_end_time = db.Column(db.DateTime)
-    status = db.Column(db.Integer)
+    status = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
     priority = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
 
 

@@ -1,3 +1,3 @@
 'use strict';
 
-var collaborationCtrlApp = angular.module('collaborationCtrlApp', []);
+var collaborationCtrlApp = angular.module('dcmsApp.collaborationCtrl', []);

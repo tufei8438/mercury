@@ -1,6 +1,6 @@
 'use strict';
 
-var mainCtrlApp = angular.module('mainCtrlApp', []);
+var mainCtrlApp = angular.module('dcmsApp.mainCtrl', []);
 
 mainCtrlApp.controller('MainCtrl', ['$scope', function($scope) {
     this.navigationTemplatePath = 'dcms-app/views/common/navigation.html';
