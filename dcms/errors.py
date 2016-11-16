@@ -21,6 +21,11 @@ class MercuryError(Exception):
     """
 
 
+class AuthError(MercuryError):
+    """用户认证异常
+    """
+
+
 class IllegalArgumentError(MercuryError):
     """非法的参数
     """
@@ -43,6 +48,10 @@ class WorkflowError(MercuryError):
     def __init__(self, code, msg):
         self.code = code
         self.msg = msg
+
+    @property
+    def message(self):
+        return "Activiti error code: {} error msg: {}".format(self.code, self.msg)
 
 
 class GatewayError(MercuryError):

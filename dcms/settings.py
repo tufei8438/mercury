@@ -23,7 +23,8 @@ SQLALCHEMY_DATABASE_URI = 'mysql://root:@localhost/cm?charset=utf8'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 RESTFUL_JSON = {
-    'cls': dcms.codec.JsonEncoder
+    'cls': dcms.codec.JsonEncoder,
+    'ensure_ascii': False,
 }
 
 CACHE_TYPE = 'simple'

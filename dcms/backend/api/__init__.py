@@ -16,6 +16,9 @@
 from flask import request
 from flask_restful import Resource, reqparse, abort
 from werkzeug.exceptions import HTTPException
+
+from dcms.backend.service.session import SessionService
+from dcms.errors import AuthError
 from dcms.log import api_log
 from dcms.backend import db
 
@@ -24,9 +27,12 @@ class ApiResource(Resource):
 
     _query_arguments = []
 
+    _auth_required = True
+
     def __init__(self):
         self.arg_namespace = None
         self.session = db.session
+        self._current_user = None
 
     def get_argument(self, name, default=None):
         value = self.arg_namespace.get(name) if self.arg_namespace else None
@@ -41,7 +47,24 @@ class ApiResource(Resource):
         model.from_dict(req_body)
         return model
 
+    def authorization(self):
+        if not self._auth_required:
+            return
+        sessionid = request.headers.get('SESSIONID')
+        if not sessionid:
+            sessionid = request.cookies.get('sessionid')
+
+        usercode = SessionService().get(sessionid)
+        if not usercode:
+            abort(403, message='请重新登录')
+        self._current_user = usercode
+
+    def get_current_user(self):
+        return self._current_user
+
     def dispatch_request(self, *args, **kwargs):
+        self.authorization()
+
         if self._query_arguments and request.method == 'GET':
             arg_parser = reqparse.RequestParser()
             arg_parser.args = self._query_arguments
@@ -50,6 +73,8 @@ class ApiResource(Resource):
             return super(ApiResource, self).dispatch_request(*args, **kwargs)
         except HTTPException:
             raise
+        except AuthError as e:
+            abort(401, message=e.message)
         except Exception as e:
             api_log.exception("{} System exception.".format(self.__class__.__name__))
             abort(500, message=e.message)

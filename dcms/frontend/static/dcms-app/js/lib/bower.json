@@ -23,6 +23,7 @@
   ],
   "dependencies": {
     "angular": "1.4.10",
+    "angular-cookies": "1.4.10",
     "angular-sanitize": "1.4.10",
     "angular-bootstrap": "2.2.0",
     "bootstrap": "3.3.6",

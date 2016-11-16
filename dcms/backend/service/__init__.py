@@ -18,13 +18,13 @@ import functools
 
 from dcms.backend import db
 from dcms.backend.models import BaseModel
-from dcms.errors import IllegalArgumentError, DatabaseError
+from dcms.errors import IllegalArgumentError, DatabaseError, MercuryError
 
 
 class DatabaseService(object):
 
-    def __init__(self):
-        self.db_session = db.session
+    db_session = db.session
+    __in_transaction = False
 
     def insert(self, model):
         if not isinstance(model, BaseModel):
@@ -32,14 +32,22 @@ class DatabaseService(object):
         self.db_session.add(model)
         self.flush()
 
+    def delete(self, model):
+        if not isinstance(model, BaseModel):
+            raise IllegalArgumentError("model参数必须是BaseModel类型")
+        self.db_session.delete(model)
+        self.flush()
+
     def flush(self):
         self.db_session.flush()
 
     def commit(self):
-        self.db_session.commit()
+        if not self.__in_transaction:
+            self.db_session.commit()
 
     def rollback(self):
-        self.db_session.rollback()
+        if not self.__in_transaction:
+            self.db_session.rollback()
 
     def save(self, model, model_class):
         if not isinstance(model_class, type) or not isinstance(model, (BaseModel, model_class)):
@@ -63,11 +71,17 @@ def transactional(func):
     def decorator(self, *args, **kwargs):
         assert isinstance(self, DatabaseService)
         try:
+            self.__in_transaction = True
             rv = func(self, *args, **kwargs)
             self.commit()
             return rv
         except Exception as e:
             self.rollback()
-            raise DatabaseError("执行数据库操作异常: {}".format(e.message))
+            if isinstance(e, MercuryError):
+                raise
+            else:
+                raise DatabaseError("执行数据库操作异常: {}".format(e.message))
+        finally:
+            self.__in_transaction = False
 
     return decorator

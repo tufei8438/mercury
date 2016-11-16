@@ -136,6 +136,15 @@ class User(WorkflowApi):
     def delete(self, user_id):
         return self.request('DELETE', '/identity/users/{}'.format(user_id))
 
+    def get(self, user_id):
+        try:
+            return self.request('GET', '/identity/users/{}'.format(user_id))
+        except WorkflowError as e:
+            if e.code == 404:
+                return None
+            else:
+                raise
+
 
 class Group(WorkflowApi):
 
@@ -153,6 +162,15 @@ class Group(WorkflowApi):
 
     def delete(self, group_id):
         return self.request('DELETE', '/identity/groups/{}'.format(group_id))
+
+    def get(self, group_id):
+        try:
+            return self.request('GET', '/identity/groups/{}'.format(group_id))
+        except WorkflowError as e:
+            if e.code == 404:
+                return None
+            else:
+                raise
 
     def add_member(self, group_id, user_id):
         payload = {

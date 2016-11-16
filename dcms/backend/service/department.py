@@ -13,7 +13,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from dcms.backend.constants import DEPT_STATUS
 from dcms.backend.service import DatabaseService
+from dcms.backend.activiti import Group
 from dcms.backend.models import Department, Region
 
 
@@ -42,4 +44,18 @@ class DepartmentService(DatabaseService):
         """根据地区ID获取地区实体
         """
         return Region.query.filter(Region.id == region_id).first()
+
+    def sync_department_to_workflow(self, department):
+        activiti_group = Group()
+        group = activiti_group.get(department.code)
+        if not group:
+            activiti_group.create(department.code, department.name)
+        elif department.status != DEPT_STATUS.ENABLE:
+            activiti_group.delete(department.code)
+        else:
+            activiti_group.update(department.code, department.name)
+
+    def sync_department_user_to_workflow(self, department):
+        pass
+
 

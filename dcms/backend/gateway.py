@@ -24,6 +24,7 @@ import requests
 import requests.exceptions
 
 from dcms.errors import GatewayError
+from dcms.log import api_log
 
 
 def hmac_sha1(key, raw):
@@ -82,10 +83,10 @@ class GatewayResponse(object):
 
 class GatewayClient(object):
 
-    API_URL = 'http://182.48.114.36:8080/platform/api'
-    APPKEY = "600016"
-    CHANNEL = "10001"
-    APPSECRET = "Fr0ZAYnVjiwLT8kN3oedvp1qcbfWJx6G"
+    API_URL = 'http://182.48.115.36:8080/platform/api'
+    APPKEY = "610152"
+    CHANNEL = "10004"
+    APPSECRET = "VgSKjru15iJfNwps6LFl4tZHzna7heBR"
 
     def __init__(self, api_url=None, appkey=None, channel=None, app_secret=None):
         self.api_url = api_url or self.API_URL
@@ -115,7 +116,9 @@ class GatewayClient(object):
 
     def _request(self, url, parameters):
         try:
+            api_log.debug('[GATEWAY REQ] parameters: {}'.format(parameters))
             r = requests.post(url, data=parameters)
+            api_log.debug('[GATEWAY RES] response: {}'.format(r.text))
             if r.status_code == 200:
                 return r.text
             else:
@@ -150,6 +153,4 @@ class UserCenter(GatewayClient):
         return self.submit('ih.user.auth.getProfile', params=parameters)
 
     def _encrypt_password(self, password):
-        sha1 = hashlib.sha1()
-        sha1.update(password)
-        return sha1.hexdigest().upper()
+        return hashlib.sha1(password).hexdigest().upper()

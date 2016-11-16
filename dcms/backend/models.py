@@ -235,8 +235,16 @@ class User(BaseModel):
     user_type = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
     name = db.Column(db.String(32), nullable=False, server_default=db.text("''"))
     phone = db.Column(db.String(16))
-    department_id = db.Column(db.Integer)
     status = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
     update_time = db.Column(db.DateTime)
     create_time = db.Column(db.DateTime, nullable=False, server_default=db.text("'0000-00-00 00:00:00'"))
+
+
+class Session(BaseModel):
+
+    __tablename__ = 'session'
+
+    id = db.Column(db.String(64), primary_key=True)
+    usercode = db.Column(db.String(16), nullable=False)
+    expire_at = db.Column(db.DateTime, nullable=False)
 

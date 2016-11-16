@@ -29,3 +29,19 @@ mainCtrlApp.controller('MainCtrl', ['$scope', function($scope) {
     };
 }]);
 
+mainCtrlApp.controller('LoginCtrl', function($scope, Restangular, $state) {
+    $scope.loginForm = {
+        username: '',
+        password: ''
+    };
+
+    $scope.doLogin = function() {
+        Restangular.all('/api/user/login').post($scope.loginForm).then(function(loginInfo) {
+            console.log('loginInfo:' + loginInfo);
+            $state.go('home.dashboard');
+        }, function(response) {
+            alert('用户名密码错误, 请重新登录');
+        })
+    };
+});
+

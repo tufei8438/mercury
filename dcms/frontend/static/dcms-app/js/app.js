@@ -5,6 +5,7 @@ var dcmsApp = angular.module('dcmsApp', [
     'oc.lazyLoad',                  // ocLazyLoad
     'ui.bootstrap',                 // Ui Bootstrap
     'ngSanitize',                   // ngSanitize
+    'ngCookies',                    // ngCookies
     'restangular',                  // restangular
     'dcmsApp.services',
     'dcmsApp.mainCtrl',
@@ -67,7 +68,7 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             abstract: true,
             url: '/home',
             templateUrl: contentTemplatUrl
-        }).state('home.dashborad', {
+        }).state('home.dashboard', {
             url: '/dashboard',
             templateUrl: 'dcms-app/views/home/dashboard.html'
         }).state('login', {
@@ -234,12 +235,31 @@ dcmsApp.run(function($rootScope, $state, $stateParams) {
         $state.go('404');
     });
 })
-.run(function($rootScope, Restangular) {
+.run(function($rootScope, Restangular, $state, $cookies) {
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
         if (response.status == 400 || response.status == 500) {
             $rootScope.addAlert('danger', response.data.message);
             return false;
+        } else if (response.status == 403) {
+            //$state.go('login');
+            return false;
         }
+        console.log('response:' + angular.toJson(response));
         return true; // error not handled
+    });
+
+    // Restangular.addFullRequestInterceptor(function(element, operation, what, url, headers, params, httpConfig) {
+    //     var sessionid = $cookies.get('sessionid');
+    //     if (sessionid) {
+    //         headers['SESSIONID'] = sessionid;
+    //     }
+    //     console.log('headers:' + angular.toJson(headers));
+    //     return {
+    //         headers: headers
+    //     }
+    // });
+
+    Restangular.all('/api/user/info').customGET().then(function(user) {
+        console.log('user:' + angular.toJson(user));
     });
 });
