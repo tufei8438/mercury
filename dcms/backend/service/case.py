@@ -17,9 +17,9 @@
 import datetime
 from dcms.backend import cache, db
 from dcms.backend.activiti import ProcessInstance
-from dcms.backend.generator import CodeGenerator
 from dcms.backend.models import Case, Category
 from dcms.backend.service import DatabaseService, transactional
+from dcms.backend.service.sequence import SequenceService
 from dcms.errors import IllegalArgumentError
 
 
@@ -48,8 +48,8 @@ class CaseService(DatabaseService):
         if not isinstance(case, Case):
             raise IllegalArgumentError("无效的case参数类型")
 
-        if case.code is None:
-            case.code = CodeGenerator.gen_case_code()
+        if not case.code:
+            case.code = SequenceService().next_seqno('CASE_CODE')
 
         if case.parent_category_code and not case.parent_category_name:
             parent_category = CategoryService().get_category(

@@ -21,6 +21,7 @@ from flask import Response
 
 from dcms.backend.api import ApiResource
 from dcms.backend.models import User
+from dcms.backend.service.permission import PermissionService
 from dcms.backend.service.user import UserService
 
 bp = Blueprint('restapi_user', __name__)
@@ -53,3 +54,26 @@ class UserResource(ApiResource):
         if user.usercode != self.get_current_user():
             abort(400, message='数据错误，用户只能修改自己的数据')
         return UserService().save(user, User)
+
+
+@api.resource('/user/permissions')
+class UserPermissionListResource(ApiResource):
+
+    _auth_required = False
+
+    def get(self):
+        return PermissionService().get_user_roles('101710')
+
+
+@api.resource('/permissions')
+class PermissionListResource(ApiResource):
+
+    def get(self):
+        return PermissionService().get_permissions()
+
+
+@api.resource('/roles')
+class RoleListResource(ApiResource):
+
+    def get(self):
+        return PermissionService().get_roles()

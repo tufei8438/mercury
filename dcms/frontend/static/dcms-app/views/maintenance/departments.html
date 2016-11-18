@@ -23,7 +23,33 @@
         </div>
         <div class="ibox-content">
           <div class="row">
-            <form class="form-horizontal">
+            <table class="table table-bordered table-hover" ng-show="false">
+              <tbody>
+                <tr>
+                  <td>部门名称</td>
+                  <td>{{selectedDept.name}}</td>
+                  <td>部门编码</td>
+                  <td>{{selectedDept.code}}</td>
+                </tr>
+                <tr>
+                  <td>部门类型</td>
+                  <td>{{selectedDept.type | departmentTypeFilter}}</td>
+                  <td>部门状态</td>
+                  <td>{{selectedDept.status | departmentStatusFilter}}</td>
+                </tr>
+                <tr>
+                  <td>部门地区</td>
+                  <td>{{selectedDept.region_id}}</td>
+                  <td>创建时间</td>
+                  <td>{{selectedDept.create_time}}</td>
+                </tr>
+                <tr>
+                  <td>部门描述</td>
+                  <td colspan="3">{{selectedDept.description}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <form class="form-horizontal" ng-show="true">
               <div class="form-group">
                 <div class="col-md-6 form-compact-col">
                   <label class="col-md-4 control-label form-compact-col">部门名称</label>

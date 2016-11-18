@@ -98,7 +98,7 @@ acceptanceCtrlApp.controller('CaseAcceptanceCtrl', function($scope, $log, Restan
             animation: true,
             templateUrl: 'modalMapLocate.html',
             controller: 'mapLocateCtrl',
-            size: 'lg',
+            size: 'lg'
         });
     };
 
@@ -297,7 +297,6 @@ acceptanceCtrlApp.controller('MapLocateCtrl', function($scope, $log, Restangular
 
 acceptanceCtrlApp.controller('CaseQueryCtrl', function($scope, Restangular) {
     var caseService = Restangular.all('/api/cases');
-
     $scope.caseList = caseService.getList().$object;
 });
 

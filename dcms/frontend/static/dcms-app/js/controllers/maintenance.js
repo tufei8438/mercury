@@ -2,6 +2,38 @@
 
 var maintenanceCtrlApp = angular.module('dcmsApp.maintenanceCtrl', []);
 
+maintenanceCtrlApp.filter('departmentTypeFilter', function() {
+    var departmentTypeList = [
+        {'id': 1, 'name': '城管系统部门'},
+        {'id': 2, 'name': '城管专业部门'}
+    ];
+
+    return function(departmentType) {
+        for (var i = 0; i < departmentTypeList.length; ++i) {
+            if (departmentType == departmentTypeList[i].id) {
+                return departmentTypeList[i].name;
+            }
+        }
+        return undefined;
+    }
+});
+
+maintenanceCtrlApp.filter('departmentStatusFilter', function() {
+    var departmentStatusList = [
+        {'id': 1, 'name': '正常'},
+        {'id': 2, 'name': '禁用'}
+    ];
+
+    return function (status) {
+        for (var i = 0; i < departmentStatusList.length; ++i) {
+            if (status == departmentStatusList[i].id) {
+                return departmentStatusList[i].name;
+            }
+        }
+        return undefined;
+    }
+});
+
 maintenanceCtrlApp.controller('DepartmentCtrl', ['$scope', '$log', 'Restangular', function($scope, $log, Restangular) {
 
     var departmentService = Restangular.all('/api/departments');
@@ -42,7 +74,7 @@ maintenanceCtrlApp.controller('DepartmentCtrl', ['$scope', '$log', 'Restangular'
                 "parent": department.parent_id == 0 ? '#' : '' + department.parent_id,
                 "text": department.name,
                 "state": {
-                    "opened": department.parent_id == 0
+                    "opened": true
                 },
                 "__uiNodeId": department.id
             };
@@ -92,7 +124,9 @@ maintenanceCtrlApp.controller('DepartmentCtrl', ['$scope', '$log', 'Restangular'
         for (var i = 0; i < $scope.departments.length; ++i) {
             var department = $scope.departments[i];
             if (department.id == selectedNode[0]) {
-                $scope.selectedDept = department;
+                $scope.$apply(function () {
+                    $scope.selectedDept = department;
+                });
                 break;
             }
         }
@@ -175,7 +209,7 @@ maintenanceCtrlApp.controller('ActivitiModelCtrl', function($scope, $uibModal, R
         modelService.one(model.id).remove().then(function() {
             $scope.addAlert('info', '设计模型：【' + model.name + '】删除成功');
             $scope.models = modelService.getList({'size': 20}).$object;
-        }, function(resonse) {
+        }, function(response) {
             $scope.addAlert('danger', response.data.message);
             console.log("Error with status code", response.status);
         });
@@ -194,4 +228,161 @@ maintenanceCtrlApp.controller('ActivitiModelCtrl', function($scope, $uibModal, R
     $scope.exportModel = function(model) {
         window.location.href = '/api/workflow/service/repository/models/' + model.id + '/xml';
     }
+});
+
+maintenanceCtrlApp.controller('ModalAddWorkflowGroupCtrl', function($scope, $uibModalInstance, Restangular) {
+    $scope.group = {
+        id: '',
+        name: '',
+        type: 'assignment'
+    };
+
+    $scope.modalSubmit = function() {
+        Restangular.all('/api/workflow/identity/groups').post($scope.group).then(function(newGroup) {
+            $uibModalInstance.close(newGroup);
+        }, function(response) {
+            $scope.addAlert('danger', response.data.message);
+        });
+
+    };
+
+    $scope.modalCancel = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+maintenanceCtrlApp.controller('ModalAddWorkflowGroupUserCtrl', function($scope, $uibModalInstance, Restangular, group) {
+    $scope.groupUser = {
+        userId: ''
+    };
+    $scope.group = group;
+    $scope.userList = Restangular.all('/api/workflow/identity/users').getList().$object;
+
+    $scope.modalSubmit = function() {
+        Restangular.all('/api/workflow/identity/groups').one($scope.group.id).post('members', $scope.groupUser).then(function() {
+            $uibModalInstance.close();
+        }, function(response) {
+            $scope.addAlert('danger', response.data.message);
+        });
+
+    };
+
+    $scope.modalCancel = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+maintenanceCtrlApp.controller('WorkflowGroupCtrl', function($scope, $uibModal, Restangular) {
+    var groupService = Restangular.all('/api/workflow/identity/groups');
+    $scope.groups = groupService.getList().$object;
+
+    $scope.selectGroup = undefined;
+    $scope.groupUsers = [];
+
+    $scope.getGroupUsers = function() {
+        $scope.groupUsers = Restangular.all('/api/workflow/identity/users').getList({memberOfGroup: $scope.selectGroup.id}).$object;
+    };
+
+    $scope.addGroup = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'ModalAddWorkflowGroup.html',
+            controller: 'ModalAddWorkflowGroupCtrl'
+        });
+
+        modalInstance.result.then(function(newGroup) {
+            $scope.groups = groupService.getList().$object;
+        });
+    };
+
+    $scope.addGroupUser = function() {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'ModalAddWorkflowGroupUser.html',
+            controller: 'ModalAddWorkflowGroupUserCtrl',
+            resolve: {
+                group: function() {
+                    return $scope.selectGroup;
+                }
+            }
+        });
+
+        modalInstance.result.then(function() {
+            $scope.groups = groupService.getList().$object;
+            $scope.getGroupUsers();
+        });
+    };
+
+    $scope.queryMember = function(group) {
+        $scope.selectGroup = group;
+        $scope.getGroupUsers();
+    };
+
+    $scope.deleteGroup = function(group) {
+        groupService.one(group.id).remove().then(function() {
+            $scope.groups = groupService.getList().$object;
+            $scope.addAlert('info', '工作组：【' + group.name + '】删除成功');
+        }, function(response) {
+            $scope.addAlert('danger', response.data.message);
+        });
+    };
+
+    $scope.deleteUserFromGroup = function(groupId, userId) {
+        groupService.one(groupId).one('members', userId).remove().then(function() {
+            $scope.getGroupUsers();
+        }, function(response) {
+            $scope.addAlert('danger', response.data.message);
+        });
+    };
+});
+
+maintenanceCtrlApp.controller('PermissionCtrl', function($scope, Restangular) {
+
+    var permissionService = Restangular.all('/api/permissions');
+
+    $scope.permissionTreeConfig = {
+        "core" : {
+            multiple : false,
+            animation: true,
+            error : function(error) {
+                $log.error("treeCtrl: error from js tree - " + angular.toJson(error));
+            },
+            check_callback : true,
+            worker : true
+        },
+        "checkbox": {
+            "keep_selected_style" : false
+        },
+        "version": 1,
+        "plugins" : ["types", "dnd", "checkbox"],
+        "types" : {
+            "default" : {
+                "icon" : "fa fa-folder"
+            }
+        }
+    };
+
+    $scope.getTreeData = function(permissions) {
+        var treeData = [];
+        for (var i = 0; i < permissions.length; ++i) {
+            var permission = permissions[i];
+            var treeNode = {
+                "id": '' + permission.id,
+                "parent": permission.parent_id == 0 ? '#' : '' + permission.parent_id,
+                "text": permission.name,
+                "state": {
+                    "opened": true
+                },
+                "__uiNodeId": permission.id
+            };
+            treeData.push(treeNode);
+        }
+        return treeData;
+    };
+
+    $scope.reCreatePermissionTree = function() {
+        permissionService.getList().then(function(permissions) {
+            $scope.permissions = permissions;
+            $scope.permissionTreeData = $scope.getTreeData(permissions);
+            $scope.permissionTreeConfig.version++;
+        });
+    };
 });

@@ -1,5 +1,5 @@
-@import url("https://fonts.gmirror.org/css?family=Open+Sans:300,400,600,700");
-@import url("https://fonts.gmirror.org/css?family=Roboto:400,300,500,700");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 /*
  *
  *   INSPINIA - Responsive Admin Theme
@@ -8251,4 +8251,8 @@ body.md-skin {
 .form-compact-col [class^="col-"] {
   padding-left: 2px;
   padding-right: 2px;
+}
+
+.bg-image {
+  background-image: url('http://www.jlcg.gov.cn/photo/up/swf/201211853738101.JPG');
 }

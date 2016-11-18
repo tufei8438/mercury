@@ -1,0 +1,35 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="CaseQueryCtrl">
+  <div class="row">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>角色列表</h5>
+      </div>
+      <div class="ibox-content">
+        <table class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>角色ID</th>
+            <th>角色名称</th>
+            <th>案件大类</th>
+            <th>案件小类</th>
+            <th>案件状态</th>
+            <th>案件时间</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr ng-repeat="caseObj in caseList">
+            <td>{{caseObj.code}}</td>
+            <td>{{caseObj.category_type | caseCategoryTypeFilter}}</td>
+            <td>{{caseObj.parent_category_name}}</td>
+            <td>{{caseObj.category_name}}</td>
+            <td>{{caseObj.status | caseStatusFilter }}</td>
+            <td>{{caseObj.begin_time}}</td>
+            <td><a class="btn btn-primary btn-sm" href="">查看详情</a></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

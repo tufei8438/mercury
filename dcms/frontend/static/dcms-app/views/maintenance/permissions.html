@@ -1,0 +1,50 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="PermissionCtrl" ng-init="reCreatePermissionTree()">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>
+            <small>权限列表</small>
+          </h5>
+        </div>
+        <div class="ibox-content">
+          <div js-tree="permissionTreeConfig" ng-model="permissionTreeData" tree="treeInstance">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>
+            <small>部门信息</small>
+          </h5>
+        </div>
+        <div class="ibox-content">
+          <div class="row">
+            <div class="col-md-6 form-compact-col">
+              <ul>
+                <li class="divider"></li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+                <li>管理员权限</li>
+              </ul>
+            </div>
+            <div class="col-md-6 form-compact-col">
+              <ul class="nav nav-divider">
+                <li class="divider"></li>
+                <li>张三</li>
+                <li>李四</li>
+                <li>王五</li>
+                <li>赵六</li>
+                <li>刘七</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

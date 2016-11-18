@@ -29,41 +29,6 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
     var contentTemplatUrl = "dcms-app/views/common/content.html";
 
     $stateProvider
-        // .state('material', {
-        //     abstract: true,
-        //     url: "/material",
-        //     templateUrl: contentTemplatUrl
-        // })
-        // .state('material.category', {
-        //     url: "/category",
-        //     templateUrl: "view/material/categories.html",
-        //     data: {pageTitle: "原料分类"},
-        //     resolve: {
-        //         loadPlugin: function ($ocLazyLoad) {
-        //             return $ocLazyLoad.load([
-        //                 {
-        //                     files: ['js/lib/bower_components/jstree/dist/themes/default/style.css',
-        //                         'js/lib/bower_components/jstree/dist/jstree.js']
-        //                 },
-        //                 {
-        //                     name: 'ngJsTree',
-        //                     files: ['js/lib/bower_components/ng-js-tree/dist/ngJsTree.js']
-        //                 }
-        //             ]);
-        //         }
-        //     }
-        // })
-        // .state('material.material', {
-        //     url: "/material",
-        //     templateUrl: "view/material/materials.html"
-        // }).state('case', {
-        //     abstract: true,
-        //     url: "/case",
-        //     templateUrl: contentTemplatUrl
-        // }).state('case.register', {
-        //     url: "/register",
-        //     templateUrl: "view/case/register.html"
-        // })
         .state('home', {
             abstract: true,
             url: '/home',
@@ -150,9 +115,12 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
             abstract: true,
             url: '/maintenance',
             templateUrl: contentTemplatUrl
-        }).state('maintenance.workflow', {
-            url: '/workflow',
+        }).state('maintenance.workflowModel', {
+            url: '/workflowModel',
             templateUrl: 'dcms-app/views/maintenance/workflow_models.html'
+        }).state('maintenance.workflowGroup', {
+            url: '/workflowGroup',
+            templateUrl: 'dcms-app/views/maintenance/workflow_groups.html'
         }).state('maintenance.orgStructure', {
             url: '/orgStructure',
             templateUrl: 'dcms-app/views/maintenance/departments.html',
@@ -172,7 +140,7 @@ dcmsApp.config(function($stateProvider, $urlRouterProvider, $ocLazyLoadProvider)
              }
         }).state('maintenance.permission', {
             url: '/permission',
-            templateUrl: 'dcms-app/views/acceptance/case_acceptance.html'
+            templateUrl: 'dcms-app/views/maintenance/permissions.html'
         }).state('basedata', {
             abstract: true,
             url: '/basedata',
@@ -208,6 +176,7 @@ dcmsApp.run(function($rootScope, $state, $stateParams) {
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
     $rootScope.alerts = [];
+    $rootScope.bgImageClass = '';
 
     $rootScope.$on("$stateChangeSuccess",  function(event, toState, toParams, fromState, fromParams) {
         // to be used for back button. won't work when page is reloaded.
@@ -234,6 +203,14 @@ dcmsApp.run(function($rootScope, $state, $stateParams) {
         console.log("$stateChangeError: " + event);
         $state.go('404');
     });
+
+    $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams, options) {
+        if (toState.name == 'login') {
+            $rootScope.bgImageClass = 'bg-image';
+        } else {
+            $rootScope.bgImageClass = '';
+        }
+    });
 })
 .run(function($rootScope, Restangular, $state, $cookies) {
     Restangular.setErrorInterceptor(function(response, deferred, responseHandler) {
@@ -241,25 +218,20 @@ dcmsApp.run(function($rootScope, $state, $stateParams) {
             $rootScope.addAlert('danger', response.data.message);
             return false;
         } else if (response.status == 403) {
-            //$state.go('login');
+            $state.go('login');
             return false;
         }
-        console.log('response:' + angular.toJson(response));
         return true; // error not handled
     });
 
-    // Restangular.addFullRequestInterceptor(function(element, operation, what, url, headers, params, httpConfig) {
-    //     var sessionid = $cookies.get('sessionid');
-    //     if (sessionid) {
-    //         headers['SESSIONID'] = sessionid;
-    //     }
-    //     console.log('headers:' + angular.toJson(headers));
-    //     return {
-    //         headers: headers
-    //     }
-    // });
+    $rootScope.currentUser = {};
+    $rootScope.currentPermissions = [];
 
     Restangular.all('/api/user/info').customGET().then(function(user) {
-        console.log('user:' + angular.toJson(user));
+        $rootScope.currentUser = user;
+    });
+
+    Restangular.all('/api/user/permissions').getList().then(function(permissions) {
+        $rootScope.currentPermissions = permissions;
     });
 });

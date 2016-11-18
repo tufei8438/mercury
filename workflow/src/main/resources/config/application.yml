@@ -1,0 +1,4 @@
+spring:
+  activiti:
+    customMybatisXMLMappers:
+      - mapper/DcmsMybatisXmlMapper.xml

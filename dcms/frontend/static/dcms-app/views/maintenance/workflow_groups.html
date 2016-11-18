@@ -1,0 +1,120 @@
+<div class="wrapper wrapper-content animated fadeInRight" ng-controller="WorkflowGroupCtrl">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>工作流组列表</h5>
+          <button class="btn btn-primary btn-sm pull-right" ng-click="addGroup()">添加组</button>
+        </div>
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>名称</th>
+                <th>类型</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="group in groups">
+                <td>{{ group.id }}</td>
+                <td>{{ group.name }}</td>
+                <td>{{ group.type }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm" ng-click="deleteGroup(group)">删除</button>
+                  <button class="btn btn-primary btn-sm" ng-click="queryMember(group)">查看成员</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>【{{ selectGroup.name || selectGroup.id }}】组用户列表</h5>
+          <button class="btn btn-primary btn-sm pull-right" ng-click="addGroupUser()" ng-show="selectGroup">添加组用户
+          </button>
+        </div>
+        <div class="ibox-content">
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+              <thead>
+              <tr>
+                <th>用户ID</th>
+                <th>用户姓名</th>
+                <th>操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr ng-repeat="groupUser in groupUsers">
+                <td>{{ groupUser.id }}</td>
+                <td>{{ groupUser.firstName }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm" ng-click="deleteUserFromGroup(selectGroup.id, groupUser.id)">
+                    删除
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/ng-template" id="ModalAddWorkflowGroup.html">
+    <div class="inmodal">
+      <div class="modal-header">
+        <i class="fa fa-laptop modal-icon"></i>
+        <h4 class="modal-title">新建组</h4>
+      </div>
+      <div class="modal-body">
+        <form name="addGroupForm" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-lg-2 control-label">ID</label>
+            <div class="col-lg-10">
+              <input type="text" placeholder="组ID" class="form-control" ng-model="group.id">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-2 control-label">名称</label>
+            <div class="col-lg-10">
+              <input type="text" placeholder="名称" class="form-control" ng-model="group.name">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="modalCancel()">取 消</button>
+        <button type="button" class="btn btn-primary" ng-click="modalSubmit()">确 定</button>
+      </div>
+    </div>
+  </script>
+  <script type="text/ng-template" id="ModalAddWorkflowGroupUser.html">
+    <div class="inmodal">
+      <div class="modal-header">
+        <i class="fa fa-laptop modal-icon"></i>
+        <h4 class="modal-title">新建【{{ group.name }}】组用户</h4>
+      </div>
+      <div class="modal-body">
+        <form name="addGroupForm" class="form-horizontal">
+          <div class="form-group">
+            <label class="col-lg-2 control-label">请选择用户</label>
+            <div class="col-lg-10">
+              <select class="form-control" ng-options="user.id as user.firstName for user in userList" ng-model="groupUser.userId"></select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="modalCancel()">取 消</button>
+        <button type="button" class="btn btn-primary" ng-click="modalSubmit()">确 定</button>
+      </div>
+    </div>
+  </script>
+</div>

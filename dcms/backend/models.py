@@ -189,6 +189,16 @@ class Department(BaseModel):
     create_time = db.Column(db.DateTime, nullable=False, server_default=db.text("CURRENT_TIMESTAMP"))
 
 
+class DepartmentUser(BaseModel):
+
+    __tablename__ = 'department_user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    department_id = db.Column(db.Integer)
+    usercode = db.Column(db.String(16))
+    title = db.Column(db.String(64))
+
+
 class Event(BaseModel):
 
     __tablename__ = 'event'
@@ -198,7 +208,8 @@ class Event(BaseModel):
     name = db.Column(db.String(64), nullable=False, server_default=db.text("''"))
     region_id = db.Column(db.Integer, nullable=False)
     dept_id = db.Column(db.Integer)
-    update_time = db.Column(db.DateTime, nullable=False, server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    update_time = db.Column(db.DateTime, nullable=False,
+                            server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
 
 class Grid(BaseModel):
@@ -207,10 +218,10 @@ class Grid(BaseModel):
 
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(32), nullable=False, unique=True, server_default=db.text("''"))
-    manage_usercode = db.Column(db.String(32), server_default=db.text("''"))
-    supervisor_usercode = db.Column(db.String(32))
+    usercode = db.Column(db.String(16), server_default=db.text("''"))
     status = db.Column(db.Integer)
-    update_time = db.Column(db.DateTime, nullable=False, server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+    update_time = db.Column(db.DateTime, nullable=False,
+                            server_default=db.text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
 
 class Region(BaseModel):
@@ -230,8 +241,7 @@ class User(BaseModel):
 
     __tablename__ = 'user'
 
-    id = db.Column(db.Integer, primary_key=True)
-    usercode = db.Column(db.String(32), nullable=False, unique=True, server_default=db.text("''"))
+    usercode = db.Column(db.String(16), nullable=False, primary_key=True, server_default=db.text("''"))
     user_type = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
     name = db.Column(db.String(32), nullable=False, server_default=db.text("''"))
     phone = db.Column(db.String(16))
@@ -247,4 +257,63 @@ class Session(BaseModel):
     id = db.Column(db.String(64), primary_key=True)
     usercode = db.Column(db.String(16), nullable=False)
     expire_at = db.Column(db.DateTime, nullable=False)
+
+
+class Sequence(BaseModel):
+
+    __tablename__ = 'sequence'
+
+    id = db.Column(db.String(64), primary_key=True)
+    name = db.Column(db.String(16), nullable=False)
+    current = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
+    min = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
+    max = db.Column(db.Integer, nullable=False, server_default=db.text("'99999999'"))
+    step = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
+    description = db.Column(db.String(256))
+
+
+class Permission(BaseModel):
+
+    __tablename__ = 'permission'
+
+    id = db.Column(db.Integer, primary_key=True)
+    parent_id = db.Column(db.Integer, nullable=False, server_default=db.text("'0'"))
+    code = db.Column(db.String(32), nullable=False, server_default=db.text("''"))
+    type = db.Column(db.Integer, nullable=False, server_default=db.text("'1'"))
+    name = db.Column(db.String(32), nullable=False, server_default=db.text("''"))
+
+
+class Role(BaseModel):
+
+    __tablename__ = 'role'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(32), nullable=False, server_default=db.text("''"))
+
+
+class RolePermission(BaseModel):
+
+    __tablename__ = 'role_permission'
+
+    id = db.Column(db.Integer, primary_key=True)
+    role_id = db.Column(db.ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'),
+                        nullable=False, index=True)
+    permission_id = db.Column(db.ForeignKey('permission.id', ondelete='CASCADE', onupdate='CASCADE'),
+                              nullable=False, index=True)
+    role = db.relationship('Role')
+    user = db.relationship('Permission')
+
+
+class RoleUser(BaseModel):
+
+    __tablename__ = 'role_user'
+
+    id = db.Column(db.Integer, primary_key=True)
+    role_id = db.Column(db.ForeignKey('role.id', ondelete='CASCADE', onupdate='CASCADE'),
+                        nullable=False, index=True)
+    usercode = db.Column(db.ForeignKey('user.usercode', ondelete='CASCADE', onupdate='CASCADE'),
+                         nullable=False, index=True, server_default=db.text("''"))
+
+    role = db.relationship('Role')
+    user = db.relationship('User')
 

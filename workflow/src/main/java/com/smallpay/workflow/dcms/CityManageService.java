@@ -16,10 +16,16 @@
 package com.smallpay.workflow.dcms;
 
 import com.smallpay.workflow.dcms.entity.CaseInfo;
+import com.smallpay.workflow.dcms.entity.Department;
+import com.smallpay.workflow.dcms.entity.Grid;
 
 public interface CityManageService {
 
     CaseInfo getCaseInfo(int caseId);
 
     void updateCaseInfoStatus(int caseId, int status);
+
+    Department getDepartment(int departmentId);
+
+    Grid getGrid(String code);
 }
